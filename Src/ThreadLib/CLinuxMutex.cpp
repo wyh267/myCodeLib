@@ -15,8 +15,8 @@ CMutex(pName)
 	m_thread = (pthread_t) 0;
 
     	pthread_mutexattr_init(&m_mtex_attr);
-    	if (pthread_mutexattr_settype(&m_mtex_attr, PTHREAD_MUTEX_ERRORCHECK_NP))
-        	printf("CLinuxMutex::CnlLinuxMutex() : Failed to set mutex attibutes\n");
+    	//if (pthread_mutexattr_settype(&m_mtex_attr, PTHREAD_MUTEX_ERRORCHECK_NP))
+        //	printf("CLinuxMutex::CnlLinuxMutex() : Failed to set mutex attibutes\n");
                
 
    	 pthread_mutex_init(&m_mutex, &m_mtex_attr);
