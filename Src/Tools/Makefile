@@ -34,8 +34,8 @@ RM-F := rm -f
 
 # # You shouldn't need to change anything below this point.
 #
-SRCS := $(wildcard *.cpp) $(wildcard $(addsuffix /*.cpp, $(SRCDIR)))
-OBJS := $(patsubst %.cpp,%.o,$(SRCS))
+SRCS := $(wildcard *.cc) $(wildcard $(addsuffix /*.cc, $(SRCDIR)))
+OBJS := $(patsubst %.cc,%.o,$(SRCS))
 DEPS := $(patsubst %.o,%.d,$(OBJS))
 MISSING_DEPS := $(filter-out $(wildcard $(DEPS)),$(DEPS))
 MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.cpp,$(MISSING_DEPS)))
