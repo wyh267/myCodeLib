@@ -1,6 +1,7 @@
 
 
 EXECUTABLE := main    # 可执行文件名
+STATICLIB := threadlib.a
 LIBDIR :=              # 静态库目录
 LIBS :=               # 静态库文件名
 INCLUDES:=.           # 头文件目录
@@ -52,8 +53,10 @@ objs : $(OBJS)
 clean :
 	@$(RM-F) *.o
 	@$(RM-F) *.d
+	@$(RM-F) *.a
 veryclean: clean
 	@$(RM-F) $(EXECUTABLE)
+	@$(RM-F) *.a
 
 rebuild: veryclean all
 ifneq ($(MISSING_DEPS),)
@@ -63,6 +66,9 @@ endif
 -include $(DEPS)
 $(EXECUTABLE) : $(OBJS)
 	$(CC) -o $(EXECUTABLE) $(OBJS) $(addprefix -L,$(LIBDIR)) $(addprefix -l,$(LIBS))
+	
+staticlibs: $(OBJS)
+	$(AR) -rc $(STATICLIB) $(OBJS)
 
 info:
 	@echo $(SRCS)

@@ -1,13 +1,43 @@
 #/bin/sh
 
 
+cleanApp()
+{
+	echo "now in " $1 " /test/ , Remove All obj files in " $1 " Now"
+	echo
+	cd $1
+	cd test
+	make veryclean 
+	echo
+	echo "Clean Over"
+	cd ../../
+
+}
+
+buildApp()
+{
+	echo "now in " $1 " /test/, building " $1 " Application now..."
+	echo
+	cd $1
+	cd test
+	make clean
+	make
+	echo
+	echo "Buid Over"
+	echo "copy application to bin/"
+	cp main ../../../Build/bin/$1_App
+	cd ../../
+
+}
+
+
 buildTarget()
 {
 	echo "now in " $1 " , building " $1 " Now"
 	echo
 	cd $1
 	make clean
-	make
+	make staticlibs
 	echo
 	echo "Buid Over"
 	cd ..
@@ -75,8 +105,10 @@ case $1 in
 	echo "Help Information:"
 	echo "all               build all target"
 	echo "alltest           build all target and application for test"
-	echo "thread / t        build thread target and application for test"
+	echo "thread / t        build thread target and static libs"
 	echo "threadclean / tc  clean thread target and application"
+	echo "threadApp / tc    build thread target and application for test"
+	echo "tac               clean thread target and application for test"
 	echo "clean             clean all targets and application"
 	;;
 	"-h")
@@ -92,6 +124,7 @@ case $1 in
 	buildAllTargets
 	;;
 	
+	##########################
 	"thread") 
 	buildTarget "ThreadLib"
 	;;
@@ -99,6 +132,15 @@ case $1 in
 	buildTarget "ThreadLib"
 	;;
 	
+	"threadApp")
+	buildApp "ThreadLib"
+	;;
+	"ta")
+	buildApp "ThreadLib"
+	;;
+	"tac")
+	cleanApp "ThreadLib"
+	;;	
 	"threadclean") 
 	cleanTarget "ThreadLib"
 	;;
@@ -108,6 +150,22 @@ case $1 in
 	"threadc")
 	cleanTarget "ThreadLib"
 	;;
+	##########################
+	
+	"tools")
+	buildTarget "Tools"
+	;;
+	"toolsclean")
+	cleanTarget "Tools"
+	;;
+	"toolsapp")
+	buildApp "Tools"
+	;;
+	"toolsappclean")
+	cleanApp "Tools"
+	;;
+	
+	
 	
 	"clean")
 	cleanAllTargets

@@ -1,10 +1,11 @@
 
 
 EXECUTABLE := main    # 可执行文件名
+STATICLIB := Tools.a
 LIBDIR :=              # 静态库目录
-LIBS :=               # 静态库文件名
-INCLUDES:=.           # 头文件目录
-SRCDIR:=            # 除了当前目录外，其他的源代码文件目录
+LIBS :=   pthread            # 静态库文件名
+INCLUDES:=../          # 头文件目录
+SRCDIR:=../           # 除了当前目录外，其他的源代码文件目录
 #
 # # Now alter any implicit rules' variables if you like, e.g.:
 
@@ -34,8 +35,8 @@ RM-F := rm -f
 
 # # You shouldn't need to change anything below this point.
 #
-SRCS := $(wildcard *.cc) $(wildcard $(addsuffix /*.cc, $(SRCDIR)))
-OBJS := $(patsubst %.cc,%.o,$(SRCS))
+SRCS := $(wildcard *.cpp) $(wildcard $(addsuffix /*.cpp, $(SRCDIR)))
+OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 DEPS := $(patsubst %.o,%.d,$(OBJS))
 MISSING_DEPS := $(filter-out $(wildcard $(DEPS)),$(DEPS))
 MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.cpp,$(MISSING_DEPS)))
@@ -52,8 +53,10 @@ objs : $(OBJS)
 clean :
 	@$(RM-F) *.o
 	@$(RM-F) *.d
+	@$(RM-F) *.a
 veryclean: clean
 	@$(RM-F) $(EXECUTABLE)
+	@$(RM-F) *.a
 
 rebuild: veryclean all
 ifneq ($(MISSING_DEPS),)
@@ -63,6 +66,9 @@ endif
 -include $(DEPS)
 $(EXECUTABLE) : $(OBJS)
 	$(CC) -o $(EXECUTABLE) $(OBJS) $(addprefix -L,$(LIBDIR)) $(addprefix -l,$(LIBS))
+	
+staticlibs: $(OBJS)
+	$(AR) -rc $(STATICLIB) $(OBJS)
 
 info:
 	@echo $(SRCS)
