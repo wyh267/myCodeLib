@@ -3,14 +3,18 @@
 #ifndef _WSOCKET_
 #define _WSOCKET_
 
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
+using namespace std;
 
 
 
 class WSocket{
 	
 public:
-	WSocket();
+	WSocket(int socket);
 	~WSocket();
 	
 	bool configureSocket();
@@ -23,16 +27,21 @@ public:
 	
 	
 	bool closeSocket();
+
+	 bool operator == (const WSocket &otherInstance) const;
 	
-private:
+//private:
 	
-	int socket_fd_
+	int socket_fd_;
 	
 	
 
 
 
 };
+
+
+
 
 
 
