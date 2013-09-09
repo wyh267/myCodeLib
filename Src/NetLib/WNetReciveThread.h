@@ -18,7 +18,9 @@ typedef enum
 	kStart,
 	kStop,
 	kPause,
-	kCheck
+	kCheck,
+	kGotData,
+	kConnectClosed
 
 }NetReciveStatusCode;
 
@@ -35,9 +37,9 @@ typedef struct _data_
 
 typedef struct _connect_info_ {
 
-	int			  socket_fd;
-	vector<SData> data_list;
-
+	int		socket_fd;
+	char		data[1024];
+	int 		data_len;
 
 }SConnect_t;
 
@@ -52,7 +54,7 @@ class WNetReciveThread:public CThread
 		WNetReciveThread(const char *m_name);
 		~WNetReciveThread();
 
-		bool configureReciveThread(int server_socket);
+		bool configureReciveThread(int server_socket,CMsgQueue *p_recive_msg);
 
 		void startReciveThread();
 		
@@ -64,6 +66,8 @@ class WNetReciveThread:public CThread
 	private:
 
 		CMsgQueue *p_control_msg_;
+
+		CMsgQueue *p_recive_msg_;
 
 		vector<int>  socket_list_;
 		int server_socket_;

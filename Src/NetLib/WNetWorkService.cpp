@@ -20,6 +20,8 @@ WNetWorkService::WNetWorkService(bool server,int port_num,int max_listen)
 	port_num_=port_num;
 	max_listen_=max_listen;
 
+	p_recive_msg_=COperatingSystemFactory::newMsgQueue("recive message for revice thread");
+
 
 }
 
@@ -80,13 +82,39 @@ ServiceCode WNetWorkService::startService()
 
 
 	p_recive_thread=new WNetReciveThread("Recive Thread");
-	p_recive_thread->configureReciveThread(server_socket);
+	p_recive_thread->configureReciveThread(server_socket,p_recive_msg_);
 	p_recive_thread->run();
 	p_recive_thread->startReciveThread();
 	
 	return kSuccess;
 
 }
+
+
+
+bool WNetWorkService::recivePacket(int timeout_ms)
+{
+	unsigned int m_msg_code;
+	void *p_msg;
+	SConnect_t *p;
+	p_recive_msg_->recvMsg(m_msg_code, p_msg);
+
+	if(m_msg_code==kGotData)
+		{
+
+			p=(SConnect_t *)p_msg;
+			p->data[p->data_len]='\0';
+			cout <<" client " << p->socket_fd << " send:" <<  p->data<< endl;
+			delete p;
+		}
+
+	if(m_msg_code == kConnectClosed)
+		{
+			cout << " Connect " << p->socket_fd << " is Closed" << endl;
+		}
+
+}
+
 
 
 

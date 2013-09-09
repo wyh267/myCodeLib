@@ -7,6 +7,9 @@
 
 #include "WNetReciveThread.h"
 
+#include "CMsgQueue.h"
+#include "COperatingSystemFactory.h"
+
 using namespace std;
 
 typedef enum 
@@ -38,6 +41,9 @@ public:
 	bool configureService();
 
 
+	bool recivePacket(int timeout_ms=0);
+
+
 
 
 private:
@@ -47,6 +53,8 @@ private:
 	int max_listen_;
 
 	WNetReciveThread *p_recive_thread;
+
+	CMsgQueue *p_recive_msg_;
 	
 
 	vector<int> socket_list_;

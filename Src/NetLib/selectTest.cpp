@@ -25,6 +25,8 @@ int main()
 
 	nw->startService();
 
+	while(1)
+		nw->recivePacket();
 
 #if 0
 	vector<int> connection;

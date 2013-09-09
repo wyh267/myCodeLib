@@ -86,21 +86,29 @@ void WNetReciveThread::checkSelectSocket()
 	    {
 		        if(FD_ISSET(*it,&fdsr))
 		        {
-				cout << " Socket [" <<*it << " ] has data" << endl; 
-				SData *buf=new SData();
-				ret = recv(*it, buf->data, sizeof(buf->data), 0);
+				//cout << " Socket [" <<*it << " ] has data" << endl; 
+
+				SConnect_t *connect_data=new SConnect_t();
+
+				//SData *buf=new SData();
+				
+				
+				ret = recv(*it, connect_data->data, sizeof(connect_data->data), 0);
+				connect_data->socket_fd=(*it);
 				if (ret <= 0) {        // client close
 					cout << "client[ " << *it << "] close" << endl;
 					close(*it);
 					FD_CLR(*it, &fdsr);
 					it = socket_list_.erase(it);
+					p_recive_msg_->sendMsg(kConnectClosed,  (void *)connect_data);
 				} else {        // receive data
-				if (ret < 1024)
+				if (ret <= 1024)
 					{
-				    		memset(&(buf->data[ret]), '\0', 1);
-						buf->data_len=ret;
+				    		//memset(&(connect_data->data[ret]), '\0', 1);
+						connect_data->data_len=ret;
+						p_recive_msg_->sendMsg(kGotData, (void *)connect_data);
 					}
-				cout <<" client " << *it << " send:" <<  buf->data<< endl;
+				//cout <<" client " << *it << " send:" <<  connect_data->data<< endl;
 				++it;
 				}
 		        }
@@ -171,12 +179,13 @@ void WNetReciveThread::mainLoop()
 }
 
 
-bool WNetReciveThread::configureReciveThread(int server_socket)
+bool WNetReciveThread::configureReciveThread(int server_socket,CMsgQueue *p_recive_msg)
 {
 
 	
 	server_socket_=server_socket;
 	max_socket_=server_socket;
+	p_recive_msg_=p_recive_msg;
 	return true;
 
 }
