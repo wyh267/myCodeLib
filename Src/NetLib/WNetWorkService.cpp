@@ -85,6 +85,10 @@ ServiceCode WNetWorkService::startService()
 	p_recive_thread->configureReciveThread(server_socket,p_recive_msg_);
 	p_recive_thread->run();
 	p_recive_thread->startReciveThread();
+
+
+	p_send_thread=new WNetSendThread("Send Thread");
+	p_send_thread->run();
 	
 	return kSuccess;
 
@@ -92,26 +96,43 @@ ServiceCode WNetWorkService::startService()
 
 
 
-bool WNetWorkService::recivePacket(int timeout_ms)
+
+bool WNetWorkService::sendPacket(SConnect_t *info)
+{
+
+	p_send_thread->sendData(info);
+
+	return true;
+
+}
+
+
+bool WNetWorkService::recivePacket(SConnect_t *info,int timeout_ms)
 {
 	unsigned int m_msg_code;
 	void *p_msg;
-	SConnect_t *p;
 	p_recive_msg_->recvMsg(m_msg_code, p_msg);
+
+	info=(SConnect_t *)p_msg;
 
 	if(m_msg_code==kGotData)
 		{
 
-			p=(SConnect_t *)p_msg;
-			p->data[p->data_len]='\0';
-			cout <<" client " << p->socket_fd << " send:" <<  p->data<< endl;
-			delete p;
+			
+			//info->data[info->data_len]='\0';
+			//cout <<" client " << info->socket_fd << " send:" <<  info->data<< endl;
+
+			//p_send_thread->sendData(info);
+			return true;
 		}
 
 	if(m_msg_code == kConnectClosed)
 		{
-			cout << " Connect " << p->socket_fd << " is Closed" << endl;
+			cout << " Connect " << info->socket_fd << " is Closed" << endl;
+			return false;
 		}
+
+	return true;
 
 }
 

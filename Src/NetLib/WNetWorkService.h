@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "WNetReciveThread.h"
+#include "WNetSendThread.h"
 
 #include "CMsgQueue.h"
 #include "COperatingSystemFactory.h"
@@ -41,7 +42,9 @@ public:
 	bool configureService();
 
 
-	bool recivePacket(int timeout_ms=0);
+	bool recivePacket(SConnect_t *info,int timeout_ms=0);
+
+	bool sendPacket(SConnect_t *info);
 
 
 
@@ -53,6 +56,7 @@ private:
 	int max_listen_;
 
 	WNetReciveThread *p_recive_thread;
+	WNetSendThread   *p_send_thread;
 
 	CMsgQueue *p_recive_msg_;
 	

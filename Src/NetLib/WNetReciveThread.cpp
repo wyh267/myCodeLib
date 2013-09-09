@@ -95,11 +95,13 @@ void WNetReciveThread::checkSelectSocket()
 				
 				ret = recv(*it, connect_data->data, sizeof(connect_data->data), 0);
 				connect_data->socket_fd=(*it);
+				//cout << "client1[ " << connect_data->socket_fd<< "] close" << endl;
 				if (ret <= 0) {        // client close
-					cout << "client[ " << *it << "] close" << endl;
+					//cout << "client[ " << *it << "] close" << endl;
 					close(*it);
 					FD_CLR(*it, &fdsr);
 					it = socket_list_.erase(it);
+					//cout << "client[ " << connect_data->socket_fd<< "] close" << endl;
 					p_recive_msg_->sendMsg(kConnectClosed,  (void *)connect_data);
 				} else {        // receive data
 				if (ret <= 1024)
