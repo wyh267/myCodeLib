@@ -19,7 +19,7 @@ using namespace std;
 
 int main()
 {
-#if 1
+#if 0
 	struct sockaddr_in serv_addr;
 	bzero(&serv_addr,sizeof(serv_addr)); 
 
@@ -61,7 +61,7 @@ int main()
 		ret=send(server_socket,sdata,240,0);
 		}
 		#endif
-#if 0
+#if 1
 	SConnect_t *rec_info;
 	SConnect_t *conn;
 
@@ -83,12 +83,12 @@ int main()
 
 	sleep(1);
 	cout << " close : " << conn->socket_fd << endl;
-	//sleep(3);
+	sleep(3);
 	while(1)
 		{
-		cout << " close : " << conn->socket_fd << endl;
+		//cout << " close : " << conn->socket_fd << endl;
 		nw->sendPacket(conn);
-		usleep(20);
+		//usleep(20);
 		}
 
 	nw->sendPacket(conn);

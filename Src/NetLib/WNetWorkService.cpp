@@ -162,6 +162,8 @@ bool WNetWorkService::sendPacket(SConnect_t *info)
 {
 
 	p_send_thread->sendData(info);
+	//send(info->socket_fd,info->data,info->data_len,0);
+	//p_send_thread->sendPacket(info);
 
 	return true;
 

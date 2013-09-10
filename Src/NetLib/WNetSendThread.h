@@ -29,13 +29,13 @@ class WNetSendThread:public CThread
 
 		void sendData(SConnect_t *data);
 
-		
+		bool sendPacket(SConnect_t *packet);
 
 	private:
 
 		CMsgQueue *p_control_msg_;
 
-		bool sendPacket(SConnect_t *packet);
+		
 
 };
 
