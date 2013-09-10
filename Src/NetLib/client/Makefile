@@ -1,6 +1,6 @@
 
 
-EXECUTABLE := net    # 可执行文件名
+EXECUTABLE := client    # 可执行文件名
 STATICLIB := 
 LIBDIR :=              # 静态库目录
 LIBS :=   pthread            # 静态库文件名

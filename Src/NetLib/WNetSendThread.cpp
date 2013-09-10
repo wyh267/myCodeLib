@@ -44,13 +44,13 @@ bool WNetSendThread::sendPacket(SConnect_t *packet)
 {
 	int sent_len=0;
 	
-	cout << "send packet :" << packet->data <<  endl;
+	//cout << "send packet :" << packet->data <<  endl;
 	
 
 	
 	int ret=send(packet->socket_fd,packet->data,packet->data_len,0);
 
-	cout << "ret :" << ret  << "  packet->data_len :" << packet->data_len<< endl;
+	//cout << "ret :" << ret  << "  packet->data_len :" << packet->data_len<< endl;
 	if(ret <= 0)
 		return false;
 	else

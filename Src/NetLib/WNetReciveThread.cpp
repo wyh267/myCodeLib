@@ -88,7 +88,7 @@ void WNetReciveThread::checkSelectSocket()
 		        {
 				//cout << " Socket [" <<*it << " ] has data" << endl; 
 
-				SConnect_t *connect_data=new SConnect_t();
+				SConnect_t *connect_data=(SConnect_t *)malloc(sizeof(SConnect_t));//new SConnect_t();
 
 				//SData *buf=new SData();
 				
@@ -106,6 +106,7 @@ void WNetReciveThread::checkSelectSocket()
 				} else {        // receive data
 				if (ret <= 1024)
 					{
+						
 				    		//memset(&(connect_data->data[ret]), '\0', 1);
 						connect_data->data_len=ret;
 						p_recive_msg_->sendMsg(kGotData, (void *)connect_data);
@@ -129,11 +130,13 @@ void WNetReciveThread::checkSelectSocket()
 		if ( new_server_socket < 0)
 		{
 			cout << "Server Accept Failed!\n" << endl;
-		}
-		cout << "Get Socket Connect . Socket Number is : [ " << new_server_socket <<" ] " << endl;
-		socket_list_.push_back(new_server_socket);
-		if(max_socket_<new_server_socket)
-			max_socket_=new_server_socket;
+		}else
+			{
+			cout << "Get Socket Connect . Socket Number is : [ " << new_server_socket <<" ] " << endl;
+			socket_list_.push_back(new_server_socket);
+			if(max_socket_<new_server_socket)
+				max_socket_=new_server_socket;
+			}
 		
 	}
 		

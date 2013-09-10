@@ -4,6 +4,7 @@
 #define _WNETWORKSERVICE_H_
 
 #include <vector>
+#include <string>
 
 #include "WNetReciveThread.h"
 #include "WNetSendThread.h"
@@ -42,9 +43,13 @@ public:
 	bool configureService();
 
 
-	bool recivePacket(SConnect_t *info,int timeout_ms=0);
+	bool recivePacket(SConnect_t **info,int timeout_ms=0);
 
 	bool sendPacket(SConnect_t *info);
+
+	SConnect_t* connectToServer(int port_num,const char * ipaddr);
+
+	bool closeSocket(SConnect_t *conn);
 
 
 
@@ -54,6 +59,8 @@ private:
 	int port_num_;
 	bool server_;
 	int max_listen_;
+
+	bool client_is_start_;
 
 	WNetReciveThread *p_recive_thread;
 	WNetSendThread   *p_send_thread;
