@@ -2,6 +2,7 @@
 
 
 #include <iostream>
+#include <vector>
 #include <string>
 #include <netinet/in.h>    // for sockaddr_in
 #include <sys/types.h>    // for socket
@@ -21,11 +22,14 @@ int main()
 {
 
 #if 1
+
+	vector<SConnect_t *> connects;
+	vector<SConnect_t *>::iterator connectsIt;;
+
+
 	SConnect_t *rec_info;
 
 	WNetWorkService *nw=new WNetWorkService(true,40239,20);
-
-	
 
 	nw->startService();
 
@@ -36,15 +40,27 @@ int main()
 		{
 			if(nw->recivePacket(&rec_info)==true)
 				{
-					 printf("REC:11\n");
 					//string *str=new string(rec_info->data);
 					;//rec_info->data[rec_info->data_len]='\0';
 					//cout << " ECHO SERVER  ===] " << rec_info->data<< endl;//<< rec_info->data << endl;
+					/*bool flag=false;
+					for(connectsIt=connects.begin();connectsIt!=connects.end();connectsIt++)
+						{
+							if((*connectsIt)->socket_fd == rec_info->socket_fd)
+								{
+									//cout << "the Same" << endl;
+									flag=true;
+								}
+						}
+
+					if(flag==false)
+						connects.push_back(rec_info);*/
+					
 					//for(int i=0;i<rec_info->data_len;i++)
 					//	cout << rec_info->data[i];
 				
 				}
-			 printf("REC:12\n");
+	//		
 			
 		}
 

@@ -7,6 +7,7 @@
 #include "CMutex.h"
 #include "CCountingSem.h"
 
+#include <pthread.h>
 
 class CLinuxMsgQueue : public CMsgQueue
 {
@@ -24,6 +25,10 @@ class CLinuxMsgQueue : public CMsgQueue
 		 
 		CMutex	*p_mutex;
 		CCountingSem *p_sem;
+
+		pthread_mutex_t mutex;
+		pthread_cond_t cond;
+		int count;
 
 };
 

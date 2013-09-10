@@ -88,7 +88,7 @@ void WNetReciveThread::checkSelectSocket()
 		        {
 				//cout << " Socket [" <<*it << " ] has data" << endl; 
 
-				SConnect_t *connect_data=(SConnect_t *)malloc(sizeof(SConnect_t));//new SConnect_t();
+				SConnect_t *connect_data=new SConnect_t();
 
 				//SData *buf=new SData();
 				
@@ -103,6 +103,7 @@ void WNetReciveThread::checkSelectSocket()
 					it = socket_list_.erase(it);
 					//cout << "client[ " << connect_data->socket_fd<< "] close" << endl;
 					p_recive_msg_->sendMsg(kConnectClosed,  (void *)connect_data);
+					
 				} else {        // receive data
 				if (ret <= 1024)
 					{

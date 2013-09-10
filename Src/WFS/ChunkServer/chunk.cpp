@@ -36,15 +36,14 @@ int main()
 		{
 			if(nw->recivePacket(&rec_info)==true)
 				{
-					 printf("REC:11\n");
 					//string *str=new string(rec_info->data);
 					;//rec_info->data[rec_info->data_len]='\0';
-					//cout << " ECHO SERVER  ===] " << rec_info->data<< endl;//<< rec_info->data << endl;
+					cout << " ECHO SERVER  ===] " << rec_info->data<< endl;//<< rec_info->data << endl;
 					//for(int i=0;i<rec_info->data_len;i++)
 					//	cout << rec_info->data[i];
 				
 				}
-			 printf("REC:12\n");
+	//		
 			
 		}
 

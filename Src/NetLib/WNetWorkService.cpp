@@ -144,6 +144,7 @@ ServiceCode WNetWorkService::startService()
 	p_recive_thread=new WNetReciveThread("Recive Thread");
 	p_recive_thread->configureReciveThread(server_socket,p_recive_msg_);
 	p_recive_thread->run();
+	//sleep(5);
 	p_recive_thread->startReciveThread();
 
 
@@ -172,13 +173,11 @@ bool WNetWorkService::recivePacket(SConnect_t **info,int timeout_ms)
 	unsigned int m_msg_code;
 	void *p_msg;
 	p_recive_msg_->recvMsg(m_msg_code, p_msg);
-
 	*info=(SConnect_t *)p_msg;
 
 	if(m_msg_code==kGotData)
 		{
 
-			
 			//info->data[info->data_len]='\0';
 			//cout <<" client " << (*info)->socket_fd << " sendlen :" <<  (*info)->data_len << " data " <<(*info)->data << endl;
 

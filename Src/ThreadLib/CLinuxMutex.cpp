@@ -37,7 +37,6 @@ bool CLinuxMutex::Lock()
 	bool locked     = false;
     	int result;
     
-        
         result = pthread_mutex_lock(&m_mutex);
     
 
@@ -65,12 +64,13 @@ bool CLinuxMutex::UnLock()
 
 	    if (m_thread!= pthread_self()) {
 	        unlocked = false;
-	        printf("CnlLinuxMutex::Unlock() :  Error - Mutex not locked or not owned by the thread! \n");
 
 	    } else {
 	         result = pthread_mutex_unlock(&m_mutex);
 		  if(result<0)
+		  	{
 		  	unlocked=false;
+		  	}
 	    }
     	return unlocked;
 

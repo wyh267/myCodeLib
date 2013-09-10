@@ -44,7 +44,7 @@ bool WNetSendThread::sendPacket(SConnect_t *packet)
 {
 	int sent_len=0;
 	
-	//cout << "send packet :" << packet->data <<  endl;
+	cout << "send packet :" << packet->data <<  endl;
 	
 
 	
@@ -96,7 +96,11 @@ void WNetSendThread::mainLoop()
 		{
 			//cout << " Recive msg " << endl;
 			p_control_msg_->recvMsg(code, p_msg);
-			sendPacket((SConnect_t *) p_msg);
+			if(sendPacket((SConnect_t *) p_msg)==false)
+				{
+				cout << "send fail" << endl;
+				p_control_msg_->sendMsg(code,p_msg);
+				}
 
 		}
 

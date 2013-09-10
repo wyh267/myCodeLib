@@ -19,14 +19,14 @@ using namespace std;
 
 int main()
 {
-#if 0
+#if 1
 	struct sockaddr_in serv_addr;
 	bzero(&serv_addr,sizeof(serv_addr)); 
 
 	serv_addr.sin_family=AF_INET;
-	serv_addr.sin_port=htons(22);
+	serv_addr.sin_port=htons(40239);
 	cout << "OK" << endl;
-	serv_addr.sin_addr.s_addr = inet_addr("192.168.0.1");//ipaddr.c_str()); //inet_addr×ª»»ÎªÍøÂç×Ö½ÚÐò
+	serv_addr.sin_addr.s_addr = inet_addr("192.168.0.74");//ipaddr.c_str()); //inet_addr×ª»»ÎªÍøÂç×Ö½ÚÐò
 	cout << "OK" << endl;
 	bzero(&(serv_addr.sin_zero),8);
 
@@ -43,21 +43,25 @@ int main()
 	if ( connect( server_socket, ( struct sockaddr *)&serv_addr , sizeof(struct sockaddr)) < 0 )
 		{
 		cout << "OK1" << endl;
-		return false;
 		}
 	else
 		{
 		cout << "OK" << endl;
-		return true;
 		}
 	
-	return true;
-	#endif
 
-	
+	char sdata[1024];
+	string data="ABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASFABCDEDFADFDSFADSFEFDASF";
+	strcpy(sdata,data.c_str());
 
-
-#if 1
+	int ret;
+	while(1)
+		{
+		usleep(100);
+		ret=send(server_socket,sdata,240,0);
+		}
+		#endif
+#if 0
 	SConnect_t *rec_info;
 	SConnect_t *conn;
 
@@ -77,10 +81,15 @@ int main()
 	conn->data_len=24;
 	cout << " Success " << endl;
 
+	sleep(1);
 	cout << " close : " << conn->socket_fd << endl;
 	//sleep(3);
-
-	nw->sendPacket(conn);
+	while(1)
+		{
+		cout << " close : " << conn->socket_fd << endl;
+		nw->sendPacket(conn);
+		usleep(20);
+		}
 
 	nw->sendPacket(conn);
 
