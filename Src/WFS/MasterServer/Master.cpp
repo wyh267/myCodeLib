@@ -58,6 +58,8 @@ int main()
 					
 					//for(int i=0;i<rec_info->data_len;i++)
 					//	cout << rec_info->data[i];
+					cout << "GOT" << rec_info->data_len <<endl;
+					nw->sendPacket(rec_info);
 				
 				}
 	//		

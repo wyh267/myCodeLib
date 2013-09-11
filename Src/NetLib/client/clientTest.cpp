@@ -64,45 +64,56 @@ int main()
 #if 1
 	SConnect_t *rec_info;
 	SConnect_t *conn;
+	vector<WNetWorkService *> nwl;
+	vector<SConnect_t *> conns;
 
-	WNetWorkService *nw=new WNetWorkService(true,40239,20);
+	string ip="192.168.0.74";
+	string data="ABCDEDFADFDSFADSFEFDASF";
+	
+	for(int i=0;i<5;i++)
+		{
+			WNetWorkService *nw=new WNetWorkService(true,40239,20);
+			conn=nw->connectToServer(40239,ip.c_str());
+			strcpy(conn->data,data.c_str());
+			conn->data_len=24;
+			nwl.push_back(nw);
+			conns.push_back(conn);
+		}
 
 	
 
-	//nw->startService();
 
-
-	//sleep(5);
-
-	string ip="192.168.0.74";
-	conn=nw->connectToServer(40239,ip.c_str());
-	string data="ABCDEDFADFDSFADSFEFDASF";
-	strcpy(conn->data,data.c_str());
-	conn->data_len=24;
-	cout << " Success " << endl;
-
+	
 	sleep(1);
-	cout << " close : " << conn->socket_fd << endl;
-	sleep(3);
+	//sleep(3);
+
+	for(int i=0;i<nwl.size();i++)
+			{
+				cout << conns[i]->socket_fd << endl;
+				if(nwl[i]->sendPacket(conns[i])==false)
+					cout << "send fail..." << endl;
+			}
+	sleep(2);
 	while(1)
 		{
 		//cout << " close : " << conn->socket_fd << endl;
-		nw->sendPacket(conn);
+			for(int i=0;i<nwl.size();i++)
+				{
+					if(nwl[i]->recivePacket(&rec_info)==true)
+						{
+							cout << "Got data " << endl;
+							nwl[i]->sendPacket(conns[i]);
+						}
+				}
+		
+			
 		//usleep(20);
 		}
 
-	nw->sendPacket(conn);
-
-	nw->sendPacket(conn);
-
-	nw->sendPacket(conn);
-
-	nw->sendPacket(conn);
-
-	//nw->closeSocket(conn);
 
 	
-	while(1);
+	while(1)
+		sleep(10);
 
 	
 

@@ -185,12 +185,20 @@ void WNetReciveThread::mainLoop()
 }
 
 
-bool WNetReciveThread::configureReciveThread(int server_socket,CMsgQueue *p_recive_msg)
+bool WNetReciveThread::configureReciveThread(int server_socket,CMsgQueue *p_recive_msg,int client_socket)
 {
 
+	if(client_socket==0)
+		{
+		server_socket_=server_socket;
+		max_socket_=server_socket;
+		}
+	else
+		{
+		socket_list_.push_back(client_socket);
+		max_socket_=server_socket;
+		}
 	
-	server_socket_=server_socket;
-	max_socket_=server_socket;
 	p_recive_msg_=p_recive_msg;
 	return true;
 

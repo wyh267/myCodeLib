@@ -76,7 +76,7 @@ SConnect_t* WNetWorkService::connectToServer(int port_num,const char * ipaddr)
 		{
 			client_is_start_=true;
 			p_recive_thread=new WNetReciveThread("Recive Thread");
-			p_recive_thread->configureReciveThread(clinet_socket,p_recive_msg_);
+			p_recive_thread->configureReciveThread(0,p_recive_msg_,clinet_socket);
 			p_recive_thread->run();
 			p_recive_thread->startReciveThread();
 
@@ -161,8 +161,34 @@ ServiceCode WNetWorkService::startService()
 bool WNetWorkService::sendPacket(SConnect_t *info)
 {
 
-	p_send_thread->sendData(info);
-	//send(info->socket_fd,info->data,info->data_len,0);
+	//p_send_thread->sendData(info);
+	#if 0
+	fd_set fdsr;
+	struct timeval tv;
+	int ret=0;
+	
+
+	FD_ZERO(&fdsr);
+	FD_SET(info->socket_fd,&fdsr);
+
+	tv.tv_sec = 3;
+	tv.tv_usec = 0;
+	if (select(info->socket_fd+1, NULL, &fdsr, NULL, &tv) > 0) 
+	{ 
+
+		if (ret < 0) {
+		    cout << "select error" << endl;
+		   return false;
+		} else if (ret == 0) {
+		   return false;
+		}
+		if (FD_ISSET(info->socket_fd, &fdsr)) 
+			ret = send(info->socket_fd,info->data,info->data_len,0);
+	}
+
+	#endif
+	send(info->socket_fd,info->data,info->data_len,0);
+	
 	//p_send_thread->sendPacket(info);
 
 	return true;

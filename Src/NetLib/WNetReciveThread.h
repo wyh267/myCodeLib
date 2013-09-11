@@ -55,7 +55,7 @@ class WNetReciveThread:public CThread
 		WNetReciveThread(const char *m_name);
 		~WNetReciveThread();
 
-		bool configureReciveThread(int server_socket,CMsgQueue *p_recive_msg);
+		bool configureReciveThread(int server_socket,CMsgQueue *p_recive_msg,int client_socket=0);
 
 		void startReciveThread();
 		
