@@ -73,6 +73,7 @@ class WNetReciveThread:public CThread
 		vector<int>  socket_list_;
 		int server_socket_;
 		int max_socket_;
+		bool client_mode_;
 
 
 		void checkSelectSocket();

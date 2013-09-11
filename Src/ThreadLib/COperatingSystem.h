@@ -26,7 +26,7 @@ class COperatingSystem
 
 
 		//create thread
-		virtual  bool createThread(CThread *mThread,unsigned long stack_size=1024*1024)=0;
+		virtual  bool createThread(CThread *mThread,unsigned long stack_size=8*1024)=0;
 
 		//system sleep function
 		virtual void  sleepSec(unsigned long sec)=0;

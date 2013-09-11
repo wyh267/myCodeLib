@@ -22,24 +22,31 @@ int main()
 {
 
 #if 1
-
+	int flag=1;
 	vector<SConnect_t *> connects;
 	vector<SConnect_t *>::iterator connectsIt;;
-
+	string data="ABCDEDFADFDSFADSFEFDASF";
 
 	SConnect_t *rec_info;
+	SConnect_t *send=new SConnect_t();
 
 	WNetWorkService *nw=new WNetWorkService(true,40239,20);
 
 	nw->startService();
 
-
+	strcpy(send->data,data.c_str());
+	send->data_len=24;
 	//sleep(5);
 
 	while(1)
 		{
 			if(nw->recivePacket(&rec_info)==true)
 				{
+					//if(flag==1)
+					//	{
+							send->socket_fd=rec_info->socket_fd;
+							//flag=0;
+					//	}
 					//string *str=new string(rec_info->data);
 					;//rec_info->data[rec_info->data_len]='\0';
 					//cout << " ECHO SERVER  ===] " << rec_info->data<< endl;//<< rec_info->data << endl;
@@ -58,8 +65,9 @@ int main()
 					
 					//for(int i=0;i<rec_info->data_len;i++)
 					//	cout << rec_info->data[i];
-					cout << "GOT" << rec_info->data_len <<endl;
-					nw->sendPacket(rec_info);
+					//cout << "GOT" << rec_info->data_len <<endl;
+					nw->sendPacket(send);
+					//delete rec_info;
 				
 				}
 	//		
@@ -71,6 +79,8 @@ int main()
 	
 
 #endif
+
+
 #if 0
 	WSocket *a=new WSocket(1);
 	WSocket *b=new WSocket(2);

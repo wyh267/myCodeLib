@@ -101,7 +101,14 @@ int main()
 				{
 					if(nwl[i]->recivePacket(&rec_info)==true)
 						{
-							cout << "Got data " << endl;
+							//cout << "Got data " << endl;
+							//SConnect_t *t=new SConnect_t();
+							//t->socket_fd=rec_info->socket_fd;
+							//strcpy(t->data,data.c_str());
+							//t->data_len=24;
+							//free( rec_info);
+							    delete rec_info;
+							//rec_info=NULL;
 							nwl[i]->sendPacket(conns[i]);
 						}
 				}

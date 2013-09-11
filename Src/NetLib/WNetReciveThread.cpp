@@ -26,7 +26,7 @@ CThread(m_name)
 
 	//add your code here
 	p_control_msg_=COperatingSystemFactory::newMsgQueue("control message for revice thread");
-	
+	client_mode_=false;
 	
 
 }
@@ -122,8 +122,8 @@ void WNetReciveThread::checkSelectSocket()
 		    }
 	   }
 
-
-	if (FD_ISSET(server_socket_, &fdsr))
+	
+	if ((client_mode_ == false )&&FD_ISSET(server_socket_, &fdsr))
 	{
 			
 	
@@ -196,7 +196,9 @@ bool WNetReciveThread::configureReciveThread(int server_socket,CMsgQueue *p_reci
 	else
 		{
 		socket_list_.push_back(client_socket);
-		max_socket_=server_socket;
+		max_socket_=client_socket; 
+		client_mode_=true;
+		cout << "add " << client_socket << endl;
 		}
 	
 	p_recive_msg_=p_recive_msg;
