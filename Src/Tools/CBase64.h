@@ -25,6 +25,7 @@ public:
 
 	static string decodeBase64(string input);
 
+	static int indexOfCode(const char c);
 
 
 
