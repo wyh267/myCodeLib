@@ -16,30 +16,25 @@ CBase64::~CBase64()
 }
 
 
-
-string CBase64::encodeBase64(string input)
+string CBase64::encodeBase64(unsigned char *input , int input_len)
 {
 	string code="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	unsigned char input_char[3];
 	char output_char[4];
 	int output_num;
 	string output_str="";
-	int near=input.size()%3;
+	int near=input_len%3;
 
-	cout<< " input : " << input << endl;
-
-	for(int i=0;i<input.size();i+=3)
+	for(int i=0;i<input_len;i+=3)
 		{
 			memset(input_char ,0,3);
 			memset(output_char ,61,4);
-			if((i+3) <= input.size())
+			if(i+3 <= input_len)
 				{
-					input.copy((char *)input_char,3,i);
+					memcpy(input_char,input+i,3);
 				}else
 					{
-						
-						input.copy((char *)input_char,input.size()-i,i);
-						cout << input_char << endl;
+						memcpy(input_char,input+i,input_len-i);
 						output_num=((int)input_char[0]<<16)+((int)input_char[1]<<8)+(int)input_char[2];
 						if(near==1)
 							{
@@ -66,15 +61,17 @@ string CBase64::encodeBase64(string input)
 			output_char[2]=code[((output_num>>6) & 0x3f)];
 			output_char[3]=code[((output_num) & 0x3f)];
 			output_str.append(output_char);
+
 			
 		}
-	
-	cout <<"encode Base64 :" << output_str <<  endl;
+
+	//cout <<"encodeBase64 Res::: " << output_str <<  endl;
+
 
 	return output_str;
-
-
 }
+
+
 
 
 int CBase64::indexOfCode(const char c)
@@ -98,28 +95,24 @@ string CBase64::decodeBase64(string input)
 	int output_num=0;
 	int k=0;
 	string output_str="";
-	//cout << input.size() << endl;
+
 	for(int i=0;i<input.size();i++)
 		{
-			//cout <<hex << input[i];
 			input_char[k]=indexOfCode(input[i]);
 			k++;
 			if(k==4)
 				{
-					cout << endl;
 					output_num= ((int)input_char[0]<<18)+((int)input_char[1]<<12)+((int)input_char[2]<<6)+((int)input_char[3]);
-					//cout << hex << (int)input_char[0] <<" " << hex << (int)input_char[1] <<" " << hex << (int)input_char[2] <<" " << hex << (int)input_char[3] <<endl;
-					//cout << hex <<output_num << endl;
-					output_char[0]=(unsigned char)(output_num >> 16) ;
-					output_char[1]=(unsigned char)(output_num >> 8) ;
-					output_char[2]=(unsigned char)(output_num ) ;
-
+					output_char[0]=(unsigned char)((output_num & 0x00FF0000 )>> 16) ;
+					output_char[1]=(unsigned char)((output_num & 0x0000FF00 ) >> 8) ;
+					output_char[2]=(unsigned char)(output_num & 0x000000FF) ;
+					output_char[3]='\0';
 					output_str.append((char *)output_char);
 					k=0;
 				}
 		}
 
-	cout << output_str << endl;
+	//cout << "decodeBase64 ::: " <<output_str << endl;
 	return output_str;
 
 

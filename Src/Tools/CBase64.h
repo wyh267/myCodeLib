@@ -21,9 +21,10 @@ public:
 
 
 
-	static string encodeBase64(string input);
+	static string encodeBase64(unsigned char *input , int input_len);
 
 	static string decodeBase64(string input);
+
 
 	static int indexOfCode(const char c);
 
