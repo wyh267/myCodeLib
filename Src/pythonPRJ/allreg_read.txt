@@ -1,0 +1,239 @@
+//addr=0x100,8
+	input           PARA_dvbc_dtmb_set;
+	input           PARA_Ts_SerOut_B0En;
+	input				PARA_adsign_set;
+	input  [4:0]		PARA_io_ctl_reg;
+//addr=0x200,8
+	input  PARA_TS_err_id_set;
+	input  PARA_TS_fstbyte_force;
+	input  PARA_Auto_Restart_en;
+	input  PARA_Ts_Serial_sync_8bit;
+	input  PARA_Ts_Serial_out_en;
+	input  PARA_TS_pin_O_enable;
+//addr=0x300,8
+	input         	PARA_agc_adjrej_en;
+	input [2:0] 		PARA_DVBC_Qam_mod;
+	input [3:0] 		PARA_DVBC_Auto_restart_cnt;
+//addr=0x400,8
+//addr=0x500,8
+//addr=0x600,8
+	input [19:0] 		PARA_tr_intp_init;
+//addr=0x700,8
+//addr=0x800,8
+	input	[15:0]		PARA_cr_intp_init;
+//addr=0x900,8
+	input  [7:0]      PARA72_PLL_M;
+
+//addr=0xa00,8
+	input					PARA_pll_sleep_mod;
+	input            	 PARA_pll_bypass_mod;
+	input  [1:0]      PARA72_PLL_OD;
+	input  [3:0]      PARA72_PLL_N;
+
+//addr=0xb00,8
+	input  PARA_pll_test_mod;
+	input  PARA_ad_test_mod;
+
+//addr=0x1000,8
+//addr=0x1100,8
+//addr=0x1200,8
+//addr=0x1300,8
+//addr=0x1400,8
+	input  [9:0] 		PARA_agc_hope_in;
+	input  [9:0] 		PARA_agc_rf_max;
+	input  [9:0] 		PARA_agc_if_gain;
+	input  [4:0] 		PARA_agc_slp_rf;
+	input  [4:0] 		PARA_agc_slp_if;
+//addr=0x1500,8
+	input           PARA_DVBC_output_valid_188;
+	input						PARA_DVBC_s_188_204;
+	input						PARA_DVBC_BlindCrEn;
+	input  [4:0]		PARA_agc_slp_ajdrej_if;
+//addr=0x1600,8
+//addr=0x1700,8
+	input  [3:0] 		PARA_agc_integ_p;
+	input  [11:0]		PARA_agc_max_ajdrej_power;
+
+
+//addr=0x8001,72
+//addr=0x8002,72
+//addr=0x8003,72
+//addr=0x8004,72
+//addr=0x8005,72
+//addr=0x8006,72
+//addr=0x8007,72
+
+	input [439:0] PARA72_lpf_coe_fir;
+
+
+//addr=0x8008,72
+
+	input PARA72_Dvbc_agc_test_mod;
+	input [7:0]					PARA72_agc_rf_up_lmt,
+									PARA72_agc_if_up_lmt,
+									PARA72_agc_if_low_lmt;
+	input [9:0]  	 PARA72_agc_delt_value;
+	input [7:0]  	 PARA72_agc_ctrl_word_max_thresh;
+	input [7:0]  	 PARA72_agc_lpf_max_threth;
+	input [7:0]  	 PARA72_agc_lpf_min_threth;
+
+//addr=0x8009,72
+	input  [11:0]  PARA72_adjch_k1;
+	input  [11:0]  PARA72_adjch_k2;
+	input  [11:0]  PARA72_adjch_k3;
+	input  [11:0]  PARA72_adjch_k4;
+	input  [11:0]  PARA72_adjch_k5;
+	input  [11:0]  PARA72_adjch_k6;
+//addr=0x800a,72
+
+	input  [7:0]   PARA72_adjch_rejen_powerref1;
+	input  [7:0]   PARA72_adjch_rejen_powerref2;
+	input  [7:0]   PARA72_adjch_rejen_powerref3;
+	input  [7:0]   PARA72_adjch_rejen_powerref4;
+	input  [7:0]   PARA72_adjch_rejen_powerref5;
+	input  [7:0]   PARA72_adjch_rejen_powerref6;
+	input  [7:0]   PARA72_adjectchannel_refpower;
+	input  [7:0]   PARA72_corej_long_power;
+
+//addr=0x800b,72
+
+	input            	 	PARA72_Dtmb_tr_zeros_op;
+	input	  [7:0] 		PARA72_tr_lf_fin_gain;
+	input	  [7:0]     	PARA72_tr_lf_fst_gain;
+
+//addr=0x800c,72
+
+	input  [ 2:0]  PARA72_adjch_r1;
+	input  [ 2:0]  PARA72_adjch_r2;
+	input  [ 2:0]  PARA72_adjch_r3;
+	input  [ 2:0]  PARA72_adjch_r4;
+	input  [ 2:0]  PARA72_adjch_r5;
+	input  [ 2:0]  PARA72_adjch_r6;
+	input  [2:0]   PARA72_adjch_en;
+	input          PARA72_user_corej_long_set;
+
+//addr=0x800d,72
+
+	input [12:0] 	PARA72_dagc2ad_thrd;
+	input [2:0] 		PARA72_dagc2ad_step;
+	input [1:0] 		PARA72_dagc2ad_avenum;
+	input         		PARA72_dagc2ad_fbmod;
+	input         		PARA72_dagc2ad_en;
+	input [12:0] 	PARA72_dagc2lpf_thrd;
+	input [2:0] 		PARA72_dagc2lpf_step;
+	input [1:0] 		PARA72_dagc2lpf_avenum;
+	input         		PARA72_dagc2lpf_fbmod;
+	input         		PARA72_dagc2lpf_en;
+
+//addr=0x800e,72
+
+
+	input [2:0] 			PARA72_ec_pathfind_thresh;
+	input  [7:0]			PARA72_ec_leakage;
+	input   [2:0]        PARA72_ec_errsft;
+	input  [3:0]         PARA72_ec_c2sft;
+	input  [6:0]         PARA72_ec_pllena_thresh;
+	input  [3:0]         PARA72_ec_leakagestep;
+	input  [3:0]         PARA72_ec_leakagestep_inv;
+	input 					PARA72_ec_sample_1or5_sel;
+	input						PARA_ec_use_sync_phase;
+
+
+//addr=0x800f,72
+
+
+
+	input[1:0]						PARA72_doppler_detect_step;
+	input [1:0]					PARA72_maxpath_angle_lf_gain;
+	input					PARA72_systme_feedback_en;
+		input [2:0] 			PARA72_cmbest_time_err_limit;
+		input [2:0]			PARA72_cmbest_freq_err_limit;
+
+	input [1:0] 			PARA72_cmbest_ModMean_sft;
+	input [3:0] 			PARA72_cmbest_init_packs;
+	input [5:0] 			PARA72_cmbest_pnscan_packs;
+	input [5:0] 			PARA72_cmbest_fqcoarsesync_pcks;
+	input [7:0] 			PARA72_cmbest_framsync_pcks;
+	input [1:0]         PARA72_cmbest_pn_mod_set;
+	input          		PARA72_cmbest_track_fstfreq_set_enable;
+	input [3:0]         PARA72_cmbest_blind_scan_field;
+	input          		PARA72_cmbest_blind_scan_min_set;
+	input                  PARA72_cmbest_time_scan_enable;
+
+
+	input [7:0]         PARA72_cmbest_cr_lf_init;
+	input [7:0]         PARA72_cmbest_cr_lf_fin;
+
+//addr=0x8010,72
+
+
+
+
+	input [15:0] 		PARA72_cmbest_theta_add_max;
+	input [15:0] 		PARA72_cmbest_theta_absadd_max;
+	input [15:0] 		PARA72_cmbest_time_add_max;
+	input [15:0] 		PARA72_cmbest_time_absadd_max;
+	input                  PARA72_cmbest_fqlock_minus_en;
+	input [2:0]   		PARA72_cmbest_lock_cnt;
+	input [3:0]   		PARA72_cmbest_unlock_cnt;
+
+//addr=0x8011,72
+
+input [3:0] PARA_FEQ_slcpnr_1_gain_p;
+input [3:0] PARA_FEQ_slcpnr_1_gain_i;
+input [3:0] PARA_FEQ_slcpnr_2_gain_p;
+input [3:0] PARA_FEQ_slcpnr_2_gain_i;
+input [2:0] PARA_FEQ_mse_coef ;
+input [3:0] PARA_FEQ_mse_feq_coef ;
+input [3:0] PARA_FEQ_h_iter_coef;
+//addr=0x8012,72
+
+   input PARA72_hbf_en;
+	input					PARA72_mf_en;
+
+	input         			PARA72_eq_fft12_en;
+	input         			PARA72_eq_id_4375_3780;
+	input	[7:0] PARA_h_feed_direct_gain_c1;
+//addr=0x8013,72
+
+   input [14:0] PARA_DVBC_scram_init;
+
+	input [2:0]    	PARA_tps_max_v_value;
+	input [3:0] 		PARA_to_tps_num;
+	input [3:0]    PARA_serial_set;
+	input	PARA_tps_max_intlv720_en;
+	input [1:0]			PARA_tps_carry_mod;
+	input [2:0] 			PARA_tps_ldpc_mod;
+	input [3:0] 			PARA_tps_qam_mod;
+	input [1:0]			PARA_tps_intlv_mod;
+	input [1:0]			PARA_tps_IQset;
+	input 						PARA_tps_carry_mod_good_flag;
+
+//addr=0x8014,72
+
+
+	input [4:0] 		PARA_ldpc_iteration_num_variable;
+	input					PARA_ldpc_demap_all_zero_sel;
+	input [4:0]			PARA_ldpc_param1;
+	input [4:0]			PARA_ldpc_param2;
+
+//addr=0x8015,72
+
+
+
+input [3:0]				PARA_FFT_zeros_len_12;
+input [3:0]				PARA_FFT_zeros_step_12;
+input [3:0]				PARA_FFT_zeros_len_67;
+input [3:0]				PARA_FFT_zeros_step_67;
+//addr=0x8016,72
+	input [2:0] PARA72_sdram_latency;
+	input [5:0] 	dly_4_dqin;
+	input [5:0] dly_4sdram_ck;
+	input [4:0] 	dly_4_cmd;
+
+
+	input [2:0]     PARA72_AD_ITUNE;
+	input       		PARA72_AD_RXREF;
+	input       		PARA72_AD_EXBGP;
+
+
