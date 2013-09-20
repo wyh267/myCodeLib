@@ -143,8 +143,25 @@ def parseAddrToXML(gruop):
     
     print gruop[0]
     print gruop[1]
+    print "++++++++++++++++++++++++"
     start_reg=0;
     start_addr=0;
+    addr=0
+    addr_and_regs=[]
+    addr_and_regs.append(gruop[1][addr])
+    for reg in gruop[0]:
+        if(reg[4]<gruop[1][addr][2]):
+            #print str(reg)+"++++"
+            addr_and_regs.append(reg)
+            start_addr=start_addr+reg[2]
+        else:
+            addr_and_regs.append(reg)
+            addr=addr+1
+            addr_and_regs.append(gruop[1][addr])
+            addr_and_regs.append(reg)
+    print addr_and_regs
+    print "========================="
+            
     
     
 
