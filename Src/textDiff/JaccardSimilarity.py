@@ -64,10 +64,66 @@ def getHashInfoFromFile(file_name,k=5):
     hash_content = hashContentsList(content_list)
     return hash_content
     
+    
+    
+#
+# 计算交集
+# 输入：两个hash表
+# 输出：交集的整数
+#
+def calcIntersection(hash_a,hash_b):
+    intersection=0
+    if(len(hash_a) <= len(hash_b)):
+        hash_min=hash_a
+        hash_max=hash_b
+    else:
+        hash_min=hash_b
+        hash_max=hash_a
+        
+    for key in hash_min:
+        if key in hash_max:
+            if(hash_min[key]<=hash_max[key]):
+                intersection=intersection+hash_min[key]
+            else:
+                intersection=intersection+hash_max[key]
+        
+    return intersection
 
 
-hash_content=getHashInfoFromFile("/Users/wuyinghao/Documents/allreg_read.txt",8)
+#
+# 计算并集
+# 输入：两个hash表
+# 输出：并集的整数
+#
+def calcUnionSet(hash_a,hash_b,intersection):
+    union_set=0
+    
+    for key in hash_a:
+        union_set=union_set+hash_a[key]
+    for key in hash_b:
+        union_set=union_set+hash_b[key]
+        
+    return union_set-intersection
+    
+    
+    
+def calcSimilarity(intersection,union_set):
+    return float(intersection)/float(union_set)
 
+hash_content1=getHashInfoFromFile("/Users/wuyinghao/Documents/test1.txt",5)
+hash_content2=getHashInfoFromFile("/Users/wuyinghao/Documents/test2.txt",5)
+
+#hash_content1={"a":1,"b":5,"c":3}
+#hash_content2={"a":2,"b":4,"d":3}
+
+
+intersection=calcIntersection(hash_content1,hash_content2)
+union_set = calcUnionSet(hash_content1,hash_content2,intersection)
+print intersection
+print union_set
+print "similarity is : " + str(calcSimilarity(intersection,union_set))
+
+#print len(hash_content)
 
 #content = readFile("/Users/wuyinghao/Documents/allreg_read.txt")
 #content_list = splitContents(content,8)
@@ -75,8 +131,8 @@ hash_content=getHashInfoFromFile("/Users/wuyinghao/Documents/allreg_read.txt",8)
 
 
 
-for key in hash_content:
-    print key + " : " + str(hash_content[key])
+#for key in hash_content:
+#    print key + " : " + str(hash_content[key])
 
 
 
