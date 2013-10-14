@@ -128,7 +128,7 @@ def calcMinHash(A,N,hash_list):
 # 输出：一个词频的hash表
 #
 #############################################
-def getHashInfoFromFile(file_name,k=5):
+def getHashInfoFromFile(file_name,k=2):
     content=readFile(file_name)
     content_list = splitContents(content,k)
     return storeIntHash(content_list)
@@ -138,52 +138,125 @@ def getHashInfoFromFile(file_name,k=5):
 
 #############################################
 #
-# 主程序
+# 计算签名
+# 输入：某个集合，minHash数组
+# 输出：更新后的签名集合
+#
+#############################################
+def calcSignatures(union,min_hash,sig_list,union_num):  
+    print sig_list
+    for indexsig,sig in enumerate(sig_list):
+        for index,v in enumerate(union):
+            if(v*min_hash[indexsig][index] < sig_list[indexsig][union_num] and v >0):
+                print "min : " +str(v*min_hash[indexsig][index])
+                sig_list[indexsig][union_num]=v*min_hash[indexsig][index]
+     
+            
+
+
+def calcSimilarity():
+    pass
+    
+    
+    
+#############################################
+#
+# 计算签名矩阵
+# 输入：签名矩阵的个数
+# 输出：签名列表集合
+#
+#############################################    
+def calcSignatureMat(sig_num,sig_len):
+    sig_list=[]
+    for i in range(sig_num):
+        sig_list.append([99999]*sig_len)
+    return sig_list
+
+#############################################
+#
+# 主程序 
 #
 #
 #############################################
-
+"""
 hash_contents=[]
+min_hashs=[]
 hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test1.txt"))
 hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test2.txt"))
 hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test3.txt"))
 adjContentList(hash_contents)
 
 a=[x for x in range(len(g_hash))]
-hash_contents.append(calcMinHash(5,len(g_hash),a))
-hash_contents.append(calcMinHash(3,len(g_hash),a))
+min_hashs.append(calcMinHash(1,len(g_hash),a))
+min_hashs.append(calcMinHash(3,len(g_hash),a))
+
+sig_list=[]
+tmp=[99999]*3
+sig_list.append(tmp)
+sig_list.append(tmp)
 
 
+for index,content in enumerate(hash_contents):
+    calcSignatures(content,min_hashs,sig_list,index)
 
-display(a,20,"N")
+
+display(a,20,"Numbers")
 print ""
 
 for i in hash_contents:
-    display(i,20,"test")
+    display(i,20,"testUnion")
 
+for i in min_hashs:
+    display(i,20,"minHash")
+    
 
+for i in sig_list:
+    display(i,3,"siglist")
 
 print len(g_hash)
 
 """
-hash_content1=getHashInfoFromFile("/Users/wuyinghao/Documents/test1.txt")
-hash_content2=getHashInfoFromFile("/Users/wuyinghao/Documents/test2.txt")
+g_hash={1:1,2:2,3:3,4:4,5:5}
+hash_contents=[]
+min_hashs=[]
+hash_contents.append([1,0,0,1,0])
+hash_contents.append([0,0,1,0,0])
+hash_contents.append([0,1,0,1,1])
+hash_contents.append([1,0,1,1,0])
+adjContentList(hash_contents)
+
+a=[x for x in range(len(g_hash))]
+min_hashs.append(calcMinHash(1,len(g_hash),a))
+min_hashs.append(calcMinHash(3,len(g_hash),a))
+min_hashs.append(calcMinHash(5,len(g_hash),a))
+min_hashs.append(calcMinHash(7,len(g_hash),a))
+min_hashs.append(calcMinHash(11,len(g_hash),a))
+
+sig_list=calcSignatureMat(5,4)
 
 
-a=[x for x in range(20)]
-display(a,20,"N")
+for index,content in enumerate(hash_contents):
+    calcSignatures(content,min_hashs,sig_list,index)
+
+
+
+
+
+
+display(a,5,"Numbers")
 print ""
 
-extend=len(g_hash)-len(hash_content1)
-hash_content1.extend([0]*extend)
-display(hash_content1,20,"test1")
+for i in hash_contents:
+    display(i,5,"testUnion")
 
-extend=len(g_hash)-len(hash_content2)
-hash_content2.extend([0]*extend)
-display(hash_content2,20,"test2")
+for i in min_hashs:
+    display(i,5,"minHash")
+    
 
-"""
+for i in sig_list:
+    display(i,4,"siglist")
 
+print len(g_hash)
 
 
 
