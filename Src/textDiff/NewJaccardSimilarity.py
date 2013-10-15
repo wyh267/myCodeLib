@@ -144,18 +144,29 @@ def getHashInfoFromFile(file_name,k=2):
 #
 #############################################
 def calcSignatures(union,min_hash,sig_list,union_num):  
-    print sig_list
+    #print sig_list
     for indexsig,sig in enumerate(sig_list):
         for index,v in enumerate(union):
             if(v*min_hash[indexsig][index] < sig_list[indexsig][union_num] and v >0):
-                print "min : " +str(v*min_hash[indexsig][index])
+                #print "min : " +str(v*min_hash[indexsig][index])
                 sig_list[indexsig][union_num]=v*min_hash[indexsig][index]
      
             
 
-
-def calcSimilarity():
-    pass
+#############################################
+#
+# 计算相似度
+# 输入：签名矩阵列表，源索引，目标索引
+# 输出：源和目标的相似度
+#
+############################################# 
+def calcSimilarity(sig_list,src_index,des_index):
+    totle=float(len(sig_list))
+    similar=0.0
+    for sig in sig_list:
+        if(sig[src_index]==sig[des_index]):
+            similar=similar+1.0
+    return similar/totle
     
     
     
@@ -227,17 +238,16 @@ adjContentList(hash_contents)
 
 a=[x for x in range(len(g_hash))]
 min_hashs.append(calcMinHash(1,len(g_hash),a))
+#min_hashs.append(calcMinHash(3,len(g_hash),a))
 min_hashs.append(calcMinHash(3,len(g_hash),a))
-min_hashs.append(calcMinHash(5,len(g_hash),a))
-min_hashs.append(calcMinHash(7,len(g_hash),a))
-min_hashs.append(calcMinHash(11,len(g_hash),a))
+#min_hashs.append(calcMinHash(7,len(g_hash),a))
+#min_hashs.append(calcMinHash(11,len(g_hash),a))
 
-sig_list=calcSignatureMat(5,4)
+sig_list=calcSignatureMat(2,4)
 
 
 for index,content in enumerate(hash_contents):
     calcSignatures(content,min_hashs,sig_list,index)
-
 
 
 
@@ -255,6 +265,12 @@ for i in min_hashs:
 
 for i in sig_list:
     display(i,4,"siglist")
+
+
+print calcSimilarity(sig_list,0,3)
+print calcSimilarity(sig_list,0,2)
+print calcSimilarity(sig_list,0,1)
+print calcSimilarity(sig_list,2,3)
 
 print len(g_hash)
 
