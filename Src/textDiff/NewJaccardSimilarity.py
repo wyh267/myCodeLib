@@ -18,6 +18,15 @@ g_hash={}
 g_val=0
 
 
+
+
+def to_unicode_or_bust(obj,encoding='utf-8'):
+    if isinstance(obj, basestring):
+        if not isinstance(obj, unicode):
+            obj = unicode(obj, encoding)
+    return obj
+
+
 #############################################
 #
 # 读取文件，保存到一个字符串中
@@ -32,7 +41,7 @@ def readFile(file_name):
     file_contents=file_contents.replace("\r","")
     file_contents=file_contents.replace("\n","")
     f.close()
-    return file_contents
+    return to_unicode_or_bust(file_contents)
     
 
     
@@ -160,7 +169,7 @@ def calcSignatures(union,min_hash,sig_list,union_num):
 # 输出：源和目标的相似度
 #
 ############################################# 
-def calcSimilarity(sig_list,src_index,des_index):
+def calcSimilarity(sig_list,src_index=0,des_index=1):
     totle=float(len(sig_list))
     similar=0.0
     for sig in sig_list:
@@ -177,11 +186,13 @@ def calcSimilarity(sig_list,src_index,des_index):
 # 输出：签名列表集合
 #
 #############################################    
-def calcSignatureMat(sig_num,sig_len):
+def calcSignatureMat(sig_num,sig_len=2):
     sig_list=[]
     for i in range(sig_num):
         sig_list.append([99999]*sig_len)
     return sig_list
+    
+    
 
 #############################################
 #
@@ -189,6 +200,55 @@ def calcSignatureMat(sig_num,sig_len):
 #
 #
 #############################################
+def calcEachSimalar(file_name_list):
+    global g_hash
+    global g_val
+    res=[]
+    for index1,v1 in enumerate(file_name_list):
+        for index2,v2 in enumerate(file_name_list):
+            g_hash.clear()
+            g_val=0
+            hash_contents=[]
+            min_hashs=[]
+            if(v1 != v2 and index2>index1):
+                hash_contents.append(getHashInfoFromFile(v1))
+                hash_contents.append(getHashInfoFromFile(v2))
+                adjContentList(hash_contents)
+                a=[x for x in range(len(g_hash))]
+                minhash_pares=[2,3,5,7,11]
+                for para in minhash_pares:
+                    min_hashs.append(calcMinHash(para,len(g_hash),a))           
+                sig_list=calcSignatureMat(len(min_hashs))
+                for index,content in enumerate(hash_contents):
+                    calcSignatures(content,min_hashs,sig_list,index)
+                simalar=calcSimilarity(sig_list)
+                res.append([v1,v2,simalar])
+                #print v1 + " ||| " + v2 + " similarity is " +str(simalar)
+    return res
+                
+
+
+#############################################
+#
+# 主程序 
+#
+#
+#############################################
+
+
+file_name_list=["/Users/wuyinghao/Documents/test1.txt",
+                "/Users/wuyinghao/Documents/test2.txt",
+                "/Users/wuyinghao/Documents/test3.txt"]
+
+
+all_res = calcEachSimalar(file_name_list)
+
+
+for res in all_res:
+    print res[0] + " ||| " + res[1] + " similarity is " +str(res[2])
+
+
+
 """
 hash_contents=[]
 min_hashs=[]
@@ -198,19 +258,19 @@ hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test3.txt")
 adjContentList(hash_contents)
 
 a=[x for x in range(len(g_hash))]
-min_hashs.append(calcMinHash(1,len(g_hash),a))
+min_hashs.append(calcMinHash(2,len(g_hash),a))
 min_hashs.append(calcMinHash(3,len(g_hash),a))
-
-sig_list=[]
-tmp=[99999]*3
-sig_list.append(tmp)
-sig_list.append(tmp)
+min_hashs.append(calcMinHash(5,len(g_hash),a))
+min_hashs.append(calcMinHash(7,len(g_hash),a))
+min_hashs.append(calcMinHash(11,len(g_hash),a))
+sig_list=calcSignatureMat(5,3)
 
 
 for index,content in enumerate(hash_contents):
     calcSignatures(content,min_hashs,sig_list,index)
 
-
+"""
+"""
 display(a,20,"Numbers")
 print ""
 
@@ -223,8 +283,16 @@ for i in min_hashs:
 
 for i in sig_list:
     display(i,3,"siglist")
+   
+    
+print calcSimilarity(sig_list,0,1)
+print calcSimilarity(sig_list,0,2)
+print calcSimilarity(sig_list,1,2)
 
 print len(g_hash)
+""" 
+
+
 
 """
 g_hash={1:1,2:2,3:3,4:4,5:5}
@@ -274,6 +342,6 @@ print calcSimilarity(sig_list,2,3)
 
 print len(g_hash)
 
-
+"""
 
 
