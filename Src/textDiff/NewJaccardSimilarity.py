@@ -343,5 +343,3 @@ print calcSimilarity(sig_list,2,3)
 print len(g_hash)
 
 """
-
-
