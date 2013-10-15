@@ -121,7 +121,10 @@ def calcUnionSet(hash_a,hash_b,intersection):
 #   
 #############################################
 def calcSimilarity(intersection,union_set):
-    return float(intersection)/float(union_set)
+    if(union_set > 0):
+        return float(intersection)/float(union_set)
+    else:
+        return 0.0
 
 
 #############################################
@@ -145,23 +148,42 @@ def getHashInfoFromFile(file_name,k=5):
 #
 #############################################
 
-
-file_name_list=["/Users/wuyinghao/Documents/test1.txt",
-                "/Users/wuyinghao/Documents/test2.txt",
-                "/Users/wuyinghao/Documents/test3.txt"]
-hash_contents=[]
-
-
-for file_name in file_name_list:
-    hash_contents.append([getHashInfoFromFile(file_name,5),file_name])
+file_name_pre="/Users/wuyinghao/Desktop/test/"
+file_name_list=[]
+for file_name_num in range(16):
+    file_name=file_name_pre+str(file_name_num) + ".txt"
+    
+    file_name_list.append(file_name)
     
 
+
+#file_name_list=["/Users/wuyinghao/Documents/test1.txt",
+#                "/Users/wuyinghao/Documents/test2.txt",
+#                "/Users/wuyinghao/Documents/test3.txt"]
+
+hash_contents=[]
+
+#获取每个文本的词汇词频表
+for file_name in file_name_list:
+    print file_name
+    hash_contents.append([getHashInfoFromFile(file_name,5),file_name])
+
+
+res=[]
 for index1,v1 in enumerate(hash_contents):
     for index2,v2 in enumerate(hash_contents):
         if(v1[1] != v2[1] and index2>index1):
-            intersection=calcIntersection(v1[0],v2[0])
-            union_set=calcUnionSet(v1[0],v2[0],intersection)
-            print v1[1]+ "||||||" + v2[1] + " similarity is : " + str(calcSimilarity(intersection,union_set))
+            intersection=calcIntersection(v1[0],v2[0]) #计算交集
+            union_set=calcUnionSet(v1[0],v2[0],intersection) #计算并集
+            similar=calcSimilarity(intersection,union_set)
+            res.append([similar,v1[1],v2[1]])
+            #print v1[1]+ "||||||" + v2[1] + " similarity is : " + str(calcSimilarity(intersection,union_set)) #计算相似度
+
+res.sort()
+
+
+for i in res[-30:]:
+    print i
 
 
 #hash_content1=getHashInfoFromFile("/Users/wuyinghao/Documents/test1.txt",5)
