@@ -12,7 +12,7 @@
 
 import os
 import time
-
+import progressbar
 
 def to_unicode_or_bust(obj,encoding='utf-8'):
     if isinstance(obj, basestring):
@@ -174,10 +174,18 @@ def getAllFilesWordsList(file_name_list,file_names,k=5):
     print u"获取每个文本的词汇词频表...."
     start = time.time()
     hash_contents=[]
+    all=float(len(file_name_list))
+    pos=0.0
+    pro = progressbar.ProgressBar().start()
     #获取每个文本的词汇词频表
     for index,file_name in enumerate(file_name_list):
+        pos=pos+1       
+        rate_num=int(pos/all*100)
+        pro.update(rate_num)
+        #time.sleep(0.1)
         hash_contents.append([getHashInfoFromFile(file_name,k),file_names[index]])
     
+    pro.finish()
     end = time.time()
     print u"获取每个文本的词汇词频表结束，用时: " + str(end-start) + u"秒"
     return hash_contents
@@ -196,7 +204,15 @@ def calcEachSimilar(hash_contents):
     print u"计算所有文本互相之间的相似度...."
     start = time.time()
     similar_list=[]
+    all=float(len(hash_contents))
+    pos=0.0
+    pro = progressbar.ProgressBar().start()     
     for index1,v1 in enumerate(hash_contents):
+        pos=pos+1
+        rate_num=int(pos/all*100)
+        pro.update(rate_num)
+        #time.sleep(0.1)
+        #print "%02d" % int(pos/all*100),
         for index2,v2 in enumerate(hash_contents):
             if(v1[1] != v2[1] and index2>index1):
                 intersection=calcIntersection(v1[0],v2[0]) #计算交集
@@ -204,7 +220,7 @@ def calcEachSimilar(hash_contents):
                 similar=calcSimilarity(intersection,union_set)
                 similar_list.append([similar,v1[1],v2[1]])
                 #print v1[1]+ "||||||" + v2[1] + " similarity is : " + str(calcSimilarity(intersection,union_set)) #计算相似度
-
+    pro.finish()
     similar_list.sort()
     similar_list.reverse()
     end = time.time()

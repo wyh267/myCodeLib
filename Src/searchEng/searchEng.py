@@ -3,7 +3,8 @@
 import os
 import urllib2
 import re
-
+import progressbar
+import time
 
 def to_unicode_or_bust(obj,encoding='utf-8'):
     if isinstance(obj, basestring):
@@ -33,10 +34,14 @@ def findAllUrls(base_url):
     return urls
     
     
+pro = progressbar.ProgressBar().start()
+for i in range(80):
+  time.sleep(0.01)
+  pro.update(i+1)
+pro.finish()
 
+#urls=findAllUrls("http://news.163.com/")
 
-urls=findAllUrls("http://news.163.com/")
-
-for i in urls:
-    print i
+#for i in urls:
+#    print i
 #    searchBaseUrl(i)

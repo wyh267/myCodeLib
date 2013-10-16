@@ -12,7 +12,7 @@
 
 import os
 import time
-
+import progressbar
 
 
 def to_unicode_or_bust(obj,encoding='utf-8'):
@@ -110,7 +110,13 @@ def getWordsHashDictionary(file_name_list,k):
     start = time.time()
     hash_table={}
     union_table=[]
+    all=float(len(file_name_list))
+    pos=0.0
+    pro = progressbar.ProgressBar().start()
     for file in file_name_list:
+        pos=pos+1
+        rate_num=int(pos/all*100)
+        pro.update(rate_num)
         content = readFile(file)
         single_hash_table={}
         for i in range(len(content)-k):
@@ -123,6 +129,7 @@ def getWordsHashDictionary(file_name_list,k):
             single_hash_table[hash_num]=1
         union_table.append(single_hash_table)
     end = time.time()
+    pro.finish()
     print u"读取文件,处理词汇列表结束，用时: " + str(end-start) + u"秒"
     return hash_table,union_table
     
@@ -145,9 +152,16 @@ def calcMinHashTableList(hash_table,min_hash_args):
     print u"计算签名哈希列表...."
     start = time.time()
     N=len(hash_table)
+    all=float(len(min_hash_args))
+    pos=0.0
+    pro = progressbar.ProgressBar().start()
     for arg in min_hash_args:
+        pos=pos+1
+        rate_num=int(pos/all*100)
+        pro.update(rate_num)
         calcMiniHash(arg[0],arg[1],N,hash_table)
     end = time.time()
+    pro.finish()
     print u"计算签名哈希列表结束，用时: " + str(end-start) + u"秒"
     
     
@@ -164,7 +178,13 @@ def createSignaturesMatrix(union_table,sig_hash_len,hash_table):
     print u"生成签名矩阵...."
     start = time.time()
     sig_mat_list=[]
+    all=float(len(union_table))
+    pos=0.0
+    pro = progressbar.ProgressBar().start()
     for union_hash in union_table:
+        pos=pos+1
+        rate_num=int(pos/all*100)
+        pro.update(rate_num)
         #print "SINGLE HASH TABLE LEN IS ::::" + str(len(union_hash))
         sig_mat=["inf"]*sig_hash_len
         for key in union_hash:
@@ -173,6 +193,7 @@ def createSignaturesMatrix(union_table,sig_hash_len,hash_table):
                     sig_mat[index]=union_hash[key]*hash_table[key][index]
         sig_mat_list.append(sig_mat)
     end = time.time()
+    pro.finish()
     print u"生成签名矩阵结束，用时: " + str(end-start) + u"秒"
     return sig_mat_list
     
