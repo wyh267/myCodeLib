@@ -11,12 +11,7 @@
 #
 
 import os
-
-
-#全局变量，提供全局字典，用于存储每个字符串对应的整数hash值
-g_hash={}
-g_val=0
-
+import time
 
 
 
@@ -41,192 +36,189 @@ def readFile(file_name):
     file_contents=file_contents.replace("\r","")
     file_contents=file_contents.replace("\n","")
     f.close()
-    return to_unicode_or_bust(file_contents)
-    
-
-    
-#############################################
-#
-# 分割字符串，使用k-shingle方式进行分割，并且更新全局字典
-# 输入：字符串，k值
-# 输出：分割好的字符串，存入数组中
-#
-#############################################
-def splitContents(content,k=5):
-    global g_hash
-    global g_val
-    content_split=[]
-    for i in range(len(content)-k):
-        content_split.append(content[i:i+k])
-        
-    for v in content_split:
-        if v in g_hash:
-            pass
-        else:
-            g_hash[v]=g_val
-            g_val=g_val+1
-    return content_split
-    
-    
-    
-
-#############################################
-#
-# 计算某个文档的简易hash值
-# 输入：文档词语数组
-# 输出：一个词频的简易hash表，用list保存
-#
-#############################################
-def storeIntHash(content_list):
-    global g_hash
-    hash_list=[0]*len(g_hash)    
-
-    for v in content_list:
-        hash_list[g_hash[v]]=hash_list[g_hash[v]]+1
-    
-    return hash_list
-
-
-
-
-
-#测试输出显示
-def display(list,end,string):
-    print string + "::\t",
-    for i in range(end):
-        print str(list[i])+ "\t",
-    print ""
-
-
-#############################################
-#
-# 数据整形
-# 输入：所有数据
-# 输出：整形后的数据
-#
-#############################################
-def adjContentList(hash_contents):
-    global g_hash
-    index=0
-    for i in hash_contents:
-        extend=len(g_hash)-len(i)
-        hash_contents[index].extend([0]*extend)
-        index=index+1
+    return file_contents
     
 
 
 
-#############################################
-#
-# hash生成函数，使用 A*x+1 mod N 的形式
-# 输入：hash序列数，参数
-# 输出：生成的hash函数
-#
-#############################################
-def calcMinHash(A,N,hash_list):
-    min_hash=[]
-    for i in hash_list:
-        min_hash.append((A*i+1)%N)
-    return min_hash
-
-
-#############################################
-#
-# 从某个文本文件获取一个集合，该集合保存了文本中单词的出现频率
-# 输入：文件名，k值,默认为5
-# 输出：一个词频的hash表
-#
-#############################################
-def getHashInfoFromFile(file_name,k=2):
-    content=readFile(file_name)
-    content_list = splitContents(content,k)
-    return storeIntHash(content_list)
-  
-
-
-
-#############################################
-#
-# 计算签名
-# 输入：某个集合，minHash数组
-# 输出：更新后的签名集合
-#
-#############################################
-def calcSignatures(union,min_hash,sig_list,union_num):  
-    #print sig_list
-    for indexsig,sig in enumerate(sig_list):
-        for index,v in enumerate(union):
-            if(v*min_hash[indexsig][index] < sig_list[indexsig][union_num] and v >0):
-                #print "min : " +str(v*min_hash[indexsig][index])
-                sig_list[indexsig][union_num]=v*min_hash[indexsig][index]
-     
-            
 
 #############################################
 #
 # 计算相似度
-# 输入：签名矩阵列表，源索引，目标索引
+# 输入：签名矩阵列表
 # 输出：源和目标的相似度
 #
 ############################################# 
-def calcSimilarity(sig_list,src_index=0,des_index=1):
-    totle=float(len(sig_list))
+def calcSimilarity(v1,v2):
+    totle=float(len(v1))
     similar=0.0
-    for sig in sig_list:
-        if(sig[src_index]==sig[des_index]):
-            similar=similar+1.0
+    for i in range(len(v1)):
+        if v1[i] == v2[i] :
+            similar=similar+1
     return similar/totle
     
+
+
+
+#############################################
+#
+# 计算签名阵列的值
+# 输入：签名函数的参数 A*x + B Mod N ,词汇表
+# 输出：修改词汇表每个key后面的List
+#
+#############################################     
+def calcMiniHash(A,B,N,hash_table):
+    for i in hash_table:
+        hash_table[i].append((A*i+B)%N)
+        
+        
+
+
+#############################################
+#
+# 获取文件列表
+# 输入：目录名
+# 输出：文件列表，文件名列表
+#
+############################################# 
+def collectFileList(file_path):
+    print u"获取文件列表...."
+    start = time.time()
+    file_name_list=[]
+    file_names=[]
+    for parent,dirnames,filenames in os.walk(file_path):
+        #print filenames
+        for file_name in filenames:
+            if(file_name[-4:] == ".txt" ):
+                file_name_list.append(file_path+file_name)
+                file_names.append(file_name)
+    end = time.time()
+    print u"获取文件列表结束，用时: " + str(end-start) + u"秒"
+    return file_name_list,file_names
     
     
 #############################################
 #
-# 计算签名矩阵
-# 输入：签名矩阵的个数
-# 输出：签名列表集合
+# 获取词汇表的哈希字典，遍历每一个文件，将词汇保存在哈希
+# 字典中
+# 输入：文件列表
+# 输出：整体词汇哈希字典，每个文件的哈希字典
 #
-#############################################    
-def calcSignatureMat(sig_num,sig_len=2):
-    sig_list=[]
-    for i in range(sig_num):
-        sig_list.append([99999]*sig_len)
-    return sig_list
+#############################################     
+def getWordsHashDictionary(file_name_list,k):
+    print u"读取文件,处理词汇列表...."
+    start = time.time()
+    hash_table={}
+    union_table=[]
+    for file in file_name_list:
+        content = readFile(file)
+        single_hash_table={}
+        for i in range(len(content)-k):
+            hash_num=hash(content[i:i+k])%2**32
+            hash_table[hash_num]=[]
+            if hash_num in single_hash_table:
+                single_hash_table[hash_num]=single_hash_table[hash_num]+1
+            else:
+                single_hash_table[hash_num]=1
+        union_table.append(single_hash_table)
+    end = time.time()
+    print u"读取文件,处理词汇列表结束，用时: " + str(end-start) + u"秒"
+    return hash_table,union_table
+    
+    
+#############################################
+#
+# 计算签名矩阵列表
+# 计算以后，hash_table 变成如下结构
+#  hash_table[123432] = [3,69,123]
+#  ...
+#  ...
+#  hash_table[34522] = [64,9,3]
+#
+#  这种形式，后面的列表表示每个签名函数对应的值
+# 输入：整体词汇哈希字典，hash函数的参数列表
+# 输出：无，直接修改整体词汇哈希字典
+#
+#############################################     
+def calcMinHashTableList(hash_table,min_hash_args):
+    print u"计算签名哈希列表...."
+    start = time.time()
+    N=len(hash_table)
+    for arg in min_hash_args:
+        calcMiniHash(arg[0],arg[1],N,hash_table)
+    end = time.time()
+    print u"计算签名哈希列表结束，用时: " + str(end-start) + u"秒"
+    
+    
+
+
+#############################################
+#
+# 生成签名矩阵
+# 输入：每个文件的哈希字典集合,签名集合的数量
+# 输出：签名矩阵
+#
+############################################# 
+def createSignaturesMatrix(union_table,sig_hash_len,hash_table):
+    print u"生成签名矩阵...."
+    start = time.time()
+    sig_mat_list=[]
+    for union_hash in union_table:
+        #print "SINGLE HASH TABLE LEN IS ::::" + str(len(union_hash))
+        sig_mat=["inf"]*sig_hash_len
+        for key in union_hash:
+            for index in range(sig_hash_len):
+                if ( union_hash[key]*hash_table[key][index] < sig_mat[index]):
+                    sig_mat[index]=union_hash[key]*hash_table[key][index]
+        sig_mat_list.append(sig_mat)
+    end = time.time()
+    print u"生成签名矩阵结束，用时: " + str(end-start) + u"秒"
+    return sig_mat_list
+    
+    
+#############################################
+#
+# 计算集合中两两的相似度
+# 输入：签名矩阵列表，文件名列表
+# 输出：相似度列表[[相似度,文件1,文件2].....[相似度,文件k,文件n]]
+#      按照相似度降序排列
+#
+############################################# 
+def calcEachSimilarity(sig_mat_list,file_names):
+    print u"计算相似度...."
+    start = time.time()
+    similar_res_list=[]
+    for index1,v1 in enumerate(sig_mat_list):
+        for index2,v2 in enumerate(sig_mat_list):
+            if(index2>index1):
+                similar_res_list.append([calcSimilarity(v1,v2),file_names[index1],file_names[index2]])
+    similar_res_list.sort()
+    similar_res_list.reverse()
+    end = time.time()
+    print u"计算相似度结束，用时: " + str(end-start) + u"秒"
+    return similar_res_list
+    
     
     
 
 #############################################
 #
-# 主程序 
+# 程序入口
+# 输入：目录路径，参数列表 A*x+B mod N 中的A 和 B ,k-shingle的k值
+#      [[A1,B1],[A2,B2]....[An,Bn]]
+# 输出：相似度列表[[相似度,文件1,文件2].....[相似度,文件k,文件n]]
+#      按照相似度降序排列
 #
-#
-#############################################
-def calcEachSimalar(file_name_list):
-    global g_hash
-    global g_val
-    res=[]
-    for index1,v1 in enumerate(file_name_list):
-        for index2,v2 in enumerate(file_name_list):
-            g_hash.clear()
-            g_val=0
-            hash_contents=[]
-            min_hashs=[]
-            if(v1 != v2 and index2>index1):
-                hash_contents.append(getHashInfoFromFile(v1))
-                hash_contents.append(getHashInfoFromFile(v2))
-                adjContentList(hash_contents)
-                a=[x for x in range(len(g_hash))]
-                minhash_pares=[2,3,5,7,11]
-                for para in minhash_pares:
-                    min_hashs.append(calcMinHash(para,len(g_hash),a))           
-                sig_list=calcSignatureMat(len(min_hashs))
-                for index,content in enumerate(hash_contents):
-                    calcSignatures(content,min_hashs,sig_list,index)
-                simalar=calcSimilarity(sig_list)
-                res.append([v1,v2,simalar])
-                #print v1 + " ||| " + v2 + " similarity is " +str(simalar)
+############################################# 
+def calcSimilarityByMiniHashSignaturesMatrix(file_path,min_hash_args,k=5):
+    
+    file_name_list,file_names=collectFileList(file_path)
+    hash_table,union_table=getWordsHashDictionary(file_name_list,k) 
+    calcMinHashTableList(hash_table,min_hash_args)
+    sig_mat_list=createSignaturesMatrix(union_table,len(min_hash_args),hash_table)
+    res=calcEachSimilarity(sig_mat_list,file_names)
+    
     return res
-                
-
 
 #############################################
 #
@@ -235,111 +227,12 @@ def calcEachSimalar(file_name_list):
 #
 #############################################
 
+file_path="/Users/wuyinghao/Desktop/test/data/media/"
+min_hash_args=[[1,1],[3,1],[5,7]]
+res=calcSimilarityByMiniHashSignaturesMatrix(file_path,min_hash_args)
 
-file_name_list=["/Users/wuyinghao/Documents/test1.txt",
-                "/Users/wuyinghao/Documents/test2.txt",
-                "/Users/wuyinghao/Documents/test3.txt"]
-
-
-all_res = calcEachSimalar(file_name_list)
-
-
-for res in all_res:
-    print res[0] + " ||| " + res[1] + " similarity is " +str(res[2])
+print u"显示输出...."
+for i in res[:10]:
+    print i
 
 
-
-"""
-hash_contents=[]
-min_hashs=[]
-hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test1.txt"))
-hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test2.txt"))
-hash_contents.append(getHashInfoFromFile("/Users/wuyinghao/Documents/test3.txt"))
-adjContentList(hash_contents)
-
-a=[x for x in range(len(g_hash))]
-min_hashs.append(calcMinHash(2,len(g_hash),a))
-min_hashs.append(calcMinHash(3,len(g_hash),a))
-min_hashs.append(calcMinHash(5,len(g_hash),a))
-min_hashs.append(calcMinHash(7,len(g_hash),a))
-min_hashs.append(calcMinHash(11,len(g_hash),a))
-sig_list=calcSignatureMat(5,3)
-
-
-for index,content in enumerate(hash_contents):
-    calcSignatures(content,min_hashs,sig_list,index)
-
-"""
-"""
-display(a,20,"Numbers")
-print ""
-
-for i in hash_contents:
-    display(i,20,"testUnion")
-
-for i in min_hashs:
-    display(i,20,"minHash")
-    
-
-for i in sig_list:
-    display(i,3,"siglist")
-   
-    
-print calcSimilarity(sig_list,0,1)
-print calcSimilarity(sig_list,0,2)
-print calcSimilarity(sig_list,1,2)
-
-print len(g_hash)
-""" 
-
-
-
-"""
-g_hash={1:1,2:2,3:3,4:4,5:5}
-hash_contents=[]
-min_hashs=[]
-hash_contents.append([1,0,0,1,0])
-hash_contents.append([0,0,1,0,0])
-hash_contents.append([0,1,0,1,1])
-hash_contents.append([1,0,1,1,0])
-adjContentList(hash_contents)
-
-a=[x for x in range(len(g_hash))]
-min_hashs.append(calcMinHash(1,len(g_hash),a))
-#min_hashs.append(calcMinHash(3,len(g_hash),a))
-min_hashs.append(calcMinHash(3,len(g_hash),a))
-#min_hashs.append(calcMinHash(7,len(g_hash),a))
-#min_hashs.append(calcMinHash(11,len(g_hash),a))
-
-sig_list=calcSignatureMat(2,4)
-
-
-for index,content in enumerate(hash_contents):
-    calcSignatures(content,min_hashs,sig_list,index)
-
-
-
-
-
-display(a,5,"Numbers")
-print ""
-
-for i in hash_contents:
-    display(i,5,"testUnion")
-
-for i in min_hashs:
-    display(i,5,"minHash")
-    
-
-for i in sig_list:
-    display(i,4,"siglist")
-
-
-print calcSimilarity(sig_list,0,3)
-print calcSimilarity(sig_list,0,2)
-print calcSimilarity(sig_list,0,1)
-print calcSimilarity(sig_list,2,3)
-
-print len(g_hash)
-
-"""

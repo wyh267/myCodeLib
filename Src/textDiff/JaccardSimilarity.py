@@ -34,7 +34,7 @@ def readFile(file_name):
     file_contents=file_contents.replace("\r","")
     file_contents=file_contents.replace("\n","")
     f.close()
-    return to_unicode_or_bust(file_contents)
+    return file_contents#to_unicode_or_bust(file_contents)
     
 
     
@@ -148,25 +148,24 @@ def getHashInfoFromFile(file_name,k=5):
 #
 #############################################
 
-file_name_pre="/Users/wuyinghao/Desktop/test/"
+file_name_pre="/Users/wuyinghao/Desktop/test/data/media/"
 file_name_list=[]
-for file_name_num in range(16):
-    file_name=file_name_pre+str(file_name_num) + ".txt"
-    
-    file_name_list.append(file_name)
-    
+file_names=[]
+for parent,dirnames,filenames in os.walk(file_name_pre):
+    for file_name in filenames:
+        if(file_name[-4:] == ".txt" ):
+            file_name_list.append(file_name_pre+file_name)
+            file_names.append(file_name)
 
 
-#file_name_list=["/Users/wuyinghao/Documents/test1.txt",
-#                "/Users/wuyinghao/Documents/test2.txt",
-#                "/Users/wuyinghao/Documents/test3.txt"]
+#print file_name_list
 
 hash_contents=[]
 
 #获取每个文本的词汇词频表
-for file_name in file_name_list:
-    print file_name
-    hash_contents.append([getHashInfoFromFile(file_name,5),file_name])
+for index,file_name in enumerate(file_name_list):
+    #print file_name
+    hash_contents.append([getHashInfoFromFile(file_name,5),file_names[index]])
 
 
 res=[]
@@ -180,34 +179,11 @@ for index1,v1 in enumerate(hash_contents):
             #print v1[1]+ "||||||" + v2[1] + " similarity is : " + str(calcSimilarity(intersection,union_set)) #计算相似度
 
 res.sort()
+res.reverse()
 
-
-for i in res[-30:]:
+for i in res[:10]:
     print i
 
-
-#hash_content1=getHashInfoFromFile("/Users/wuyinghao/Documents/test1.txt",5)
-#hash_content2=getHashInfoFromFile("/Users/wuyinghao/Documents/test2.txt",5)
-
-#hash_content1={"a":1,"b":5,"c":3}
-#hash_content2={"a":2,"b":4,"d":3}
-
-
-#intersection=calcIntersection(hash_content1,hash_content2)
-#union_set = calcUnionSet(hash_content1,hash_content2,intersection)
-#print intersection
-#print union_set
-#print "similarity is : " + str(calcSimilarity(intersection,union_set))
-
-#print len(hash_content)
-#content = readFile("/Users/wuyinghao/Documents/allreg_read.txt")
-#content_list = splitContents(content,8)
-#hash_content = hashContentsList(content_list)
-
-
-
-#for key in hash_content:
-#    print key + " : " + str(hash_content[key])
 
 
 
