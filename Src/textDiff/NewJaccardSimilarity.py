@@ -116,10 +116,11 @@ def getWordsHashDictionary(file_name_list,k):
         for i in range(len(content)-k):
             hash_num=hash(content[i:i+k])%2**32
             hash_table[hash_num]=[]
-            if hash_num in single_hash_table:
-                single_hash_table[hash_num]=single_hash_table[hash_num]+1
-            else:
-                single_hash_table[hash_num]=1
+            #if hash_num in single_hash_table:
+            #    single_hash_table[hash_num]=single_hash_table[hash_num]+1
+            #else:
+            #    single_hash_table[hash_num]=1
+            single_hash_table[hash_num]=1
         union_table.append(single_hash_table)
     end = time.time()
     print u"读取文件,处理词汇列表结束，用时: " + str(end-start) + u"秒"
@@ -227,12 +228,12 @@ def calcSimilarityByMiniHashSignaturesMatrix(file_path,min_hash_args,k=5):
 #
 #############################################
 
-file_path="/Users/wuyinghao/Desktop/test/data/media/"
-min_hash_args=[[1,1],[3,1],[5,7]]
-res=calcSimilarityByMiniHashSignaturesMatrix(file_path,min_hash_args)
+#file_path="/Users/wuyinghao/Desktop/test/data/media/"
+#min_hash_args=[[1,1],[3,1],[5,7]]
+#res=calcSimilarityByMiniHashSignaturesMatrix(file_path,min_hash_args)
 
-print u"显示输出...."
-for i in res[:10]:
-    print i
+#print u"显示输出...."
+#for i in res[:10]:
+#    print i
 
 

@@ -11,7 +11,7 @@
 #
 
 import os
-
+import time
 
 
 def to_unicode_or_bust(obj,encoding='utf-8'):
@@ -143,46 +143,88 @@ def getHashInfoFromFile(file_name,k=5):
 
 #############################################
 #
-# 主程序
+# 获取文件列表
+# 输入：目录名
+# 输出：文件列表，文件名列表
 #
+############################################# 
+def collectFileList(file_path):
+    print u"获取文件列表...."
+    start = time.time()
+    file_name_list=[]
+    file_names=[]
+    for parent,dirnames,filenames in os.walk(file_path):
+        #print filenames
+        for file_name in filenames:
+            if(file_name[-4:] == ".txt" ):
+                file_name_list.append(file_path+file_name)
+                file_names.append(file_name)
+    end = time.time()
+    print u"获取文件列表结束，用时: " + str(end-start) + u"秒"
+    return file_name_list,file_names
+
+#############################################
+#
+# 获取每个文件词汇
+# 输入：文件列表
+# 输出：词汇表列表
+#
+############################################# 
+def getAllFilesWordsList(file_name_list,file_names,k=5):
+    print u"获取每个文本的词汇词频表...."
+    start = time.time()
+    hash_contents=[]
+    #获取每个文本的词汇词频表
+    for index,file_name in enumerate(file_name_list):
+        hash_contents.append([getHashInfoFromFile(file_name,k),file_names[index]])
+    
+    end = time.time()
+    print u"获取每个文本的词汇词频表结束，用时: " + str(end-start) + u"秒"
+    return hash_contents
+    
+
+
+
+#############################################
+#
+# 计算两两相似度
+# 输入：哈希数据列表
+# 输出：相似度数组
+#
+############################################# 
+def calcEachSimilar(hash_contents):
+    print u"计算所有文本互相之间的相似度...."
+    start = time.time()
+    similar_list=[]
+    for index1,v1 in enumerate(hash_contents):
+        for index2,v2 in enumerate(hash_contents):
+            if(v1[1] != v2[1] and index2>index1):
+                intersection=calcIntersection(v1[0],v2[0]) #计算交集
+                union_set=calcUnionSet(v1[0],v2[0],intersection) #计算并集
+                similar=calcSimilarity(intersection,union_set)
+                similar_list.append([similar,v1[1],v2[1]])
+                #print v1[1]+ "||||||" + v2[1] + " similarity is : " + str(calcSimilarity(intersection,union_set)) #计算相似度
+
+    similar_list.sort()
+    similar_list.reverse()
+    end = time.time()
+    print u"计算所有文本互相之间的相似度结束，用时: " + str(end-start) + u"秒"
+    return similar_list
+
+#############################################
+#
+# 主程序
+# 输入:路径和k-shingle中的k值
+# 输出:两两相似度数组
 #
 #############################################
-
-file_name_pre="/Users/wuyinghao/Desktop/test/data/media/"
-file_name_list=[]
-file_names=[]
-for parent,dirnames,filenames in os.walk(file_name_pre):
-    for file_name in filenames:
-        if(file_name[-4:] == ".txt" ):
-            file_name_list.append(file_name_pre+file_name)
-            file_names.append(file_name)
+def calcSimilarityByWords(file_path,k=5):
+    file_name_list,file_names=collectFileList(file_path)
+    hash_contents=getAllFilesWordsList(file_name_list,file_names,k)
+    res=calcEachSimilar(hash_contents)
+    return res
 
 
-#print file_name_list
-
-hash_contents=[]
-
-#获取每个文本的词汇词频表
-for index,file_name in enumerate(file_name_list):
-    #print file_name
-    hash_contents.append([getHashInfoFromFile(file_name,5),file_names[index]])
-
-
-res=[]
-for index1,v1 in enumerate(hash_contents):
-    for index2,v2 in enumerate(hash_contents):
-        if(v1[1] != v2[1] and index2>index1):
-            intersection=calcIntersection(v1[0],v2[0]) #计算交集
-            union_set=calcUnionSet(v1[0],v2[0],intersection) #计算并集
-            similar=calcSimilarity(intersection,union_set)
-            res.append([similar,v1[1],v2[1]])
-            #print v1[1]+ "||||||" + v2[1] + " similarity is : " + str(calcSimilarity(intersection,union_set)) #计算相似度
-
-res.sort()
-res.reverse()
-
-for i in res[:10]:
-    print i
 
 
 
