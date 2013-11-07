@@ -24,10 +24,10 @@ CThread::CThread(const char *m_thread_name)
 	
 
 	if(p_opration_system==NULL)
-		{
-			printf(" OS Create Fail...\n");
-			exit(0);
-		}
+	{
+		printf(" OS Create Fail...\n");
+		exit(0);
+	}
 
 
 

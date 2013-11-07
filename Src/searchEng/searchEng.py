@@ -34,14 +34,14 @@ def findAllUrls(base_url):
     return urls
     
     
-pro = progressbar.ProgressBar().start()
-for i in range(80):
-  time.sleep(0.01)
-  pro.update(i+1)
-pro.finish()
+#pro = progressbar.ProgressBar().start()
+#for i in range(80):
+#  time.sleep(0.01)
+#  pro.update(i+1)
+#pro.finish()
 
-#urls=findAllUrls("http://news.163.com/")
+urls=findAllUrls("http://news.163.com/")
 
-#for i in urls:
-#    print i
+for i in urls:
+    print i
 #    searchBaseUrl(i)

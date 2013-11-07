@@ -48,6 +48,8 @@ print ""
 print ""
 
 print u"使用基本JaccardSimilarity计算结果，显示输出...."
+for i in res1:
+    print i[1]
 
 table = Texttable()
 table.set_deco(Texttable.HEADER)
@@ -65,6 +67,8 @@ print u"======================================================================="
 
 
 print u"使用优化JaccardSimilarity计算近似相似度结果，显示输出...."
+
+
 table = Texttable()
 table.set_deco(Texttable.HEADER)
 table.set_cols_dtype(['t',  # text 

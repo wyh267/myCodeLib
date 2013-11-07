@@ -11,27 +11,26 @@
 
 class CLinuxMsgQueue : public CMsgQueue
 {
-	public:
-		CLinuxMsgQueue(const char *pName=NULL);
-		~CLinuxMsgQueue();
+public:
+	CLinuxMsgQueue(const char *pName=NULL);
+	~CLinuxMsgQueue();
 
-		virtual bool recvMsg(unsigned int &m_msg_code,void *&p_msg);
-		virtual bool sendMsg(unsigned int m_msg_code,void *p_msg);
+	virtual bool recvMsg(unsigned int &m_msg_code,void *&p_msg);
+	virtual bool sendMsg(unsigned int m_msg_code,void *p_msg);
 
-	private:
+private:
 
-		 std::deque<Elements>            m_queue;
+	std::deque<Elements>            m_queue;
 
-		 
-		CMutex	*p_mutex;
-		CCountingSem *p_sem;
+	
+	CMutex	*p_mutex;
+	CCountingSem *p_sem;
 
-		pthread_mutex_t mutex;
-		pthread_cond_t cond;
-		int count;
+	pthread_mutex_t mutex;
+	pthread_cond_t cond;
+	int count;
 
 };
-
 
 
 

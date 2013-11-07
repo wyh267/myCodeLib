@@ -14,12 +14,12 @@ CMutex(pName)
 
 	m_thread = (pthread_t) 0;
 
-    	pthread_mutexattr_init(&m_mtex_attr);
-    	//if (pthread_mutexattr_settype(&m_mtex_attr, PTHREAD_MUTEX_ERRORCHECK_NP))
-        //	printf("CLinuxMutex::CnlLinuxMutex() : Failed to set mutex attibutes\n");
+	pthread_mutexattr_init(&m_mtex_attr);
+	//if (pthread_mutexattr_settype(&m_mtex_attr, PTHREAD_MUTEX_ERRORCHECK_NP))
+	//	printf("CLinuxMutex::CnlLinuxMutex() : Failed to set mutex attibutes\n");
                
 
-   	 pthread_mutex_init(&m_mutex, &m_mtex_attr);
+	pthread_mutex_init(&m_mutex, &m_mtex_attr);
 
 
 
@@ -35,44 +35,44 @@ bool CLinuxMutex::Lock()
 {
 
 	bool locked     = false;
-    	int result;
+	int result;
     
-        result = pthread_mutex_lock(&m_mutex);
+	result = pthread_mutex_lock(&m_mutex);
     
 
-    switch (result) {
-      case 0:
-        m_thread = pthread_self();
+	switch (result) {
+		case 0:
+		m_thread = pthread_self();
 
-        locked = true;
-        break;
-      case EDEADLK:
-        locked = true;
-        break;
-      default:
-        break;
-    }
+		locked = true;
+		break;
+		case EDEADLK:
+		locked = true;
+		break;
+		default:
+		break;
+	}
 
-    return locked;
+	return locked;
 
 }
 
 bool CLinuxMutex::UnLock()
 {
 	int result;
-    	bool unlocked   = true;
+	bool unlocked   = true;
 
-	    if (m_thread!= pthread_self()) {
-	        unlocked = false;
+	if (m_thread!= pthread_self()) {
+		unlocked = false;
 
-	    } else {
-	         result = pthread_mutex_unlock(&m_mutex);
-		  if(result<0)
-		  	{
-		  	unlocked=false;
-		  	}
-	    }
-    	return unlocked;
+	} else {
+		result = pthread_mutex_unlock(&m_mutex);
+		if(result<0)
+		{
+			unlocked=false;
+		}
+	}
+	return unlocked;
 
 }
 

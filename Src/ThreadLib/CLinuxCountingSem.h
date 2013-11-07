@@ -29,21 +29,21 @@
 
 class CLinuxCountingSem:public CCountingSem
 {
-	public:
-		CLinuxCountingSem(unsigned int init_sem_count);
-		~CLinuxCountingSem();
+public:
+	CLinuxCountingSem(unsigned int init_sem_count);
+	~CLinuxCountingSem();
 
 
-		 virtual bool                Get(Mode mode = kForever, unsigned long timeoutMS = 0) ;
+	virtual bool                Get(Mode mode = kForever, unsigned long timeoutMS = 0) ;
 
-    		 virtual bool                Post(void) ;
-
-
+	virtual bool                Post(void) ;
 
 
-	private:
 
-		sem_t		sem;
+
+private:
+
+	sem_t		sem;
 
 
 };
