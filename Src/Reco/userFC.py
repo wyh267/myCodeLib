@@ -230,7 +230,7 @@ if __name__ == '__main__':
     reload(sys)
     sys.setdefaultencoding('utf-8')
     movies=getMoviesList("/Users/wuyinghao/Downloads/ml-100k/u.item")
-    recommend_list,user_movie,items_movie,neighbors=recommendByUserFC("/Users/wuyinghao/Downloads/ml-100k/u.data",24,80)
+    recommend_list,user_movie,items_movie,neighbors=recommendByUserFC("/Users/wuyinghao/Downloads/ml-100k/u.data",179,80)
     neighbors_id=[ i[1] for i in neighbors]
     table = Texttable()
     table.set_deco(Texttable.HEADER)
@@ -245,7 +245,7 @@ if __name__ == '__main__':
         for user_id in items_movie[movie_id]:
             if user_id in neighbors_id:
                 from_user.append(user_id)
-        rows.append([movies[movie_id][0],movies[movie_id][1],from_user])
+        rows.append([movies[movie_id][0],movies[movie_id][1],""])
     table.add_rows(rows)
     print table.draw()
     #print neighbors
