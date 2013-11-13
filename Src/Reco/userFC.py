@@ -248,10 +248,7 @@ if __name__ == '__main__':
         rows.append([movies[movie_id][0],movies[movie_id][1],""])
     table.add_rows(rows)
     print table.draw()
-    #print neighbors
-    #print user_movie
-    #print user_movie
-    #print neighbors
+
 
     
     
