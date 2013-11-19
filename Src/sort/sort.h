@@ -108,8 +108,9 @@ namespace aglo{
 		//	归并排序
 		//
 		void mergeSort(){
-			vector<T> merge;
-			_mergeSort((*m_sort_list),merge,0,(*m_sort_list).size());
+			
+			_mergeSort(1);
+			
 		}
 		
 		
@@ -135,10 +136,10 @@ namespace aglo{
 			for(size_t i = 0; i < (*m_sort_list).size(); ++i)
 			{
 				cout << (*m_sort_list)[i] << ",";
-				/* code */
+
 			}
 			cout << endl;
-			//cout << compre(4,3) << endl;
+
 		}
 	
 	
@@ -146,16 +147,58 @@ namespace aglo{
 	
 	private:
 		vector<T> *m_sort_list;
+		vector<T> m_merge_list;
 		bool (*compre)(T,T);
 		void (*swap)(T&,T&);
 		
 		//
+		//	归并排序具体实现,双路归并
 		//
-		//
-		void _mergeSort(vector<T>source,vector<T>target,int start,int end){
+		void _mergeSort(int len){
+
+			if(len>(*m_sort_list).size())
+				return;
+			
+			m_merge_list.clear();
+			for(size_t i = 0; i < (*m_sort_list).size(); i+=len*2)
+			{
+				
+				int j=i;
+				int k=i+len;
+				int maxj = ( i+len >= (*m_sort_list).size() ) ? (*m_sort_list).size() : (i+len);
+				int maxk = ( i+2*len >= (*m_sort_list).size() ) ? (*m_sort_list).size() : (i+2*len);
+				
+				while((j<maxj) && (k<maxk) )
+				{
+					if ( compre((*m_sort_list)[k],(*m_sort_list)[j]))
+					{
+						m_merge_list.push_back((*m_sort_list)[j]);
+						j++;
+					}else{
+						m_merge_list.push_back((*m_sort_list)[k]);
+						k++;
+					}
+				}
+				
+				if(j==maxj){
+					for(size_t ii = k; ii < maxk; ++ii)
+					{
+						m_merge_list.push_back((*m_sort_list)[ii]);
+					}
+				}else
+				{
+					for(size_t ii = j; ii < maxj; ++ii)
+					{
+						m_merge_list.push_back((*m_sort_list)[ii]);
+					}
+				}
+				
+			}
+			
+			*m_sort_list= m_merge_list;
 			
 			
-			
+			_mergeSort(len*2);
 			
 		}
 		
@@ -214,7 +257,7 @@ namespace aglo{
 			i = start;
 			j = end;
 			if((arr.size()==0))
-			     return;
+				return;
 			         
 			while(i<j){
 			      
@@ -246,12 +289,7 @@ namespace aglo{
 			}
 		}
 
-	
 	};
-
-	
-
-	
 
 
 }
@@ -278,7 +316,7 @@ void makeArray(vector<int>& array,int num){
 		
 	for(size_t i = 0; i < num; ++i)
 	{
-		array.push_back(rand()%1000);
+		array.push_back(rand()%100);
 		/* code */
 	}
 	
@@ -288,11 +326,9 @@ void makeArray(vector<int>& array,int num){
 int main (int argc, char const *argv[])
 {
 	vector<int> a;
-	//cout << rand()%100 << endl;
-	//cout << rand()%100 << endl;
-	makeArray(a,10);
-	aglo::SortClass<int> sort(a,comp,swap);
 	
+	aglo::SortClass<int> sort(a,comp,swap);
+	makeArray(a,10);
 	cout << "############### 快速排序法 ###############" << endl;
 	cout << "排序前::: " ;
 	sort.displaySort();
@@ -303,7 +339,7 @@ int main (int argc, char const *argv[])
 	
 	
 	a.clear();
-	makeArray(a,10);
+	makeArray(a,11);
 	cout << "############### 插入排序法 ###############" << endl;
 	cout << "排序前::: " ;
 	sort.displaySort();
@@ -311,6 +347,8 @@ int main (int argc, char const *argv[])
 	cout << "排序后::: ";
 	sort.displaySort();
 	cout << endl;
+	
+	
 	a.clear();
 	makeArray(a,10);
 	cout << "############### 冒泡排序法 ###############" << endl;
@@ -320,6 +358,8 @@ int main (int argc, char const *argv[])
 	cout << "排序后::: ";
 	sort.displaySort();
 	cout << endl;
+	
+	
 	a.clear();
 	makeArray(a,10);
 	cout << "############### 选择排序法 ###############" << endl;
@@ -329,6 +369,8 @@ int main (int argc, char const *argv[])
 	cout << "排序后::: ";
 	sort.displaySort();
 	cout << endl;
+	
+	
 	a.clear();
 	makeArray(a,10);
 	cout << "############### 堆排序法 ###############" << endl;
@@ -337,7 +379,16 @@ int main (int argc, char const *argv[])
 	sort.heapSort();
 	cout << "排序后::: ";
 	sort.displaySort();
+	cout << endl;
 	
+	a.clear();
+	makeArray(a,20);
+	cout << "############### 归并排序法 ###############" << endl;
+	cout << "排序前::: " ;
+	sort.displaySort();
+	sort.mergeSort();
+	cout << "排序后::: ";
+	sort.displaySort();
 	
 	
 	
