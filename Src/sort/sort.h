@@ -15,9 +15,10 @@ namespace aglo{
 	template<typename T>
 	class SortClass{
 	public:
-		SortClass(vector<T>& sort_list,bool(*comp)(T,T)){
+		SortClass(vector<T>& sort_list,bool(*comp)(T,T),void(*_swap)(T&,T&)){
 			m_sort_list=&sort_list;
 			compre=comp;
+			swap=_swap;
 		}
 	
 	
@@ -56,10 +57,9 @@ namespace aglo{
 				for(size_t j = i+1; j < (*m_sort_list).size(); ++j)
 				{
 					if(compre((*m_sort_list)[i],(*m_sort_list)[j])==true){
-						T tmp;
-						tmp=(*m_sort_list)[j];
-						(*m_sort_list)[j]=(*m_sort_list)[i];
-						(*m_sort_list)[i]=tmp;
+						
+						swap((*m_sort_list)[i],(*m_sort_list)[j]);
+						
 					}
 
 				}
@@ -73,7 +73,7 @@ namespace aglo{
 		//	快速排序
 		//
 		void quickSort(){
-			_quickSort((*m_sort_list),0,(*m_sort_list).size());
+			_quickSort((*m_sort_list),0,(*m_sort_list).size()-1);
 		}
 		
 		
@@ -83,7 +83,7 @@ namespace aglo{
 		void selectionSort(){
 			
 			int min_index;
-			T temp;
+
 			for(size_t i = 0; i < (*m_sort_list).size()-1; ++i)
 			{
 				min_index=i;
@@ -96,9 +96,8 @@ namespace aglo{
 				
 				if (i != min_index)
 				{
-					temp=(*m_sort_list)[min_index];
-					(*m_sort_list)[min_index]=(*m_sort_list)[i];
-					(*m_sort_list)[i]=temp;
+					swap((*m_sort_list)[min_index],(*m_sort_list)[i]);
+					
 				}
 			}
 			
@@ -118,13 +117,12 @@ namespace aglo{
 		//	堆排序
 		//
 		void heapSort(){
-			T tmp;
+	
 			buildHeap();
 			for(int i = (*m_sort_list).size()-1; i > 0; --i)
 			{
-				tmp=(*m_sort_list)[i];
-				(*m_sort_list)[i]=(*m_sort_list)[0];
-				(*m_sort_list)[0]=tmp;				
+				swap((*m_sort_list)[0],(*m_sort_list)[i]);
+								
 				adjHeap(0,i);
 
 			}
@@ -149,6 +147,7 @@ namespace aglo{
 	private:
 		vector<T> *m_sort_list;
 		bool (*compre)(T,T);
+		void (*swap)(T&,T&);
 		
 		//
 		//
@@ -169,26 +168,25 @@ namespace aglo{
 	
 			int left=start*2+1;
 			int right=start*2+2;
-			T tmp;
+	
 			
-			if((*m_sort_list)[start] < (*m_sort_list)[left] &&left < size){
-				tmp=(*m_sort_list)[start];
-				(*m_sort_list)[start]=(*m_sort_list)[left];
-				(*m_sort_list)[left]=tmp;
+			if(  ( compre((*m_sort_list)[start],(*m_sort_list)[left]) == false )  &&left < size){
+				
+				swap((*m_sort_list)[start],(*m_sort_list)[left]);
+				
+			
 				adjHeap(left,size);
 			}
 			
-			if((*m_sort_list)[start] < (*m_sort_list)[right] && right < size){
-				tmp=(*m_sort_list)[start];
-				(*m_sort_list)[start]=(*m_sort_list)[right];
-				(*m_sort_list)[right]=tmp;
+			if(  ( compre((*m_sort_list)[start],(*m_sort_list)[right]) == false ) && right < size){
+				swap((*m_sort_list)[start],(*m_sort_list)[right]);
+				
+				
 				adjHeap(right,size);
 			}	
 			
 				
 			return ;
-			
-			
 			
 			
 		}
@@ -223,20 +221,19 @@ namespace aglo{
 				while(i<j && compre(arr[j],arr[i])){     
 					j--;
 				}
-				if(i<j){                  
-					int temp = arr[i];
-					arr[i] = arr[j];
-					arr[j] = temp;
+				if(i<j){   
+					swap(arr[i],arr[j]);
+				               
+					
 				}
 				   
 				   
 				while(i<j&&compre(arr[j],arr[i])){    
 					i++;
 				}
-				if(i<j){                 
-					int temp = arr[i];
-					arr[i] = arr[j];
-					arr[j] = temp;
+				if(i<j){   
+					swap(arr[i],arr[j]);              
+					
 				}
 			}
 					
@@ -269,6 +266,14 @@ bool comp(int a,int b){
 
 
 
+void swap(int &a,int &b){
+	int tmp;
+	tmp=a;
+	a=b;
+	b=tmp;
+}
+
+
 void makeArray(vector<int>& array,int num){
 		
 	for(size_t i = 0; i < num; ++i)
@@ -285,8 +290,9 @@ int main (int argc, char const *argv[])
 	vector<int> a;
 	//cout << rand()%100 << endl;
 	//cout << rand()%100 << endl;
-	aglo::SortClass<int> sort(a,comp);
 	makeArray(a,10);
+	aglo::SortClass<int> sort(a,comp,swap);
+	
 	cout << "############### 快速排序法 ###############" << endl;
 	cout << "排序前::: " ;
 	sort.displaySort();
@@ -294,6 +300,8 @@ int main (int argc, char const *argv[])
 	cout << "排序后::: ";
 	sort.displaySort();
 	cout << endl;
+	
+	
 	a.clear();
 	makeArray(a,10);
 	cout << "############### 插入排序法 ###############" << endl;
