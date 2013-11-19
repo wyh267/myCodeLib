@@ -61,14 +61,14 @@ namespace aglo{
 						(*m_sort_list)[j]=(*m_sort_list)[i];
 						(*m_sort_list)[i]=tmp;
 					}
-					/* code */
+
 				}
-				/* code */
+
 			}
 			
 		}
 		
-		
+	
 		//
 		//	快速排序
 		//
@@ -76,6 +76,33 @@ namespace aglo{
 			_quickSort((*m_sort_list),0,(*m_sort_list).size());
 		}
 		
+		
+		//
+		//	选择排序
+		//
+		void selectionSort(){
+			
+			int min_index;
+			T temp;
+			for(size_t i = 0; i < (*m_sort_list).size()-1; ++i)
+			{
+				min_index=i;
+				for(size_t j = i+1; j < (*m_sort_list).size(); ++j)
+				{
+					if ( compre((*m_sort_list)[min_index],(*m_sort_list)[j]) == true)
+						min_index=j;
+					
+				}
+				
+				if (i != min_index)
+				{
+					temp=(*m_sort_list)[min_index];
+					(*m_sort_list)[min_index]=(*m_sort_list)[i];
+					(*m_sort_list)[i]=temp;
+				}
+			}
+			
+		}
 		
 		void displaySort(){
 			
@@ -161,7 +188,7 @@ void makeArray(vector<int>& array,int num){
 		
 	for(size_t i = 0; i < num; ++i)
 	{
-		array.push_back(rand()%1000);
+		array.push_back(rand()%10);
 		/* code */
 	}
 	
@@ -174,7 +201,7 @@ int main (int argc, char const *argv[])
 	//cout << rand()%100 << endl;
 	//cout << rand()%100 << endl;
 	aglo::SortClass<int> sort(a,comp);
-	makeArray(a,50);
+	makeArray(a,10);
 	cout << "############### 快速排序法 ###############" << endl;
 	cout << "排序前::: " ;
 	sort.displaySort();
@@ -183,7 +210,7 @@ int main (int argc, char const *argv[])
 	sort.displaySort();
 	cout << endl;
 	a.clear();
-	makeArray(a,50);
+	makeArray(a,10);
 	cout << "############### 插入排序法 ###############" << endl;
 	cout << "排序前::: " ;
 	sort.displaySort();
@@ -192,13 +219,25 @@ int main (int argc, char const *argv[])
 	sort.displaySort();
 	cout << endl;
 	a.clear();
-	makeArray(a,50);
+	makeArray(a,10);
 	cout << "############### 冒泡排序法 ###############" << endl;
 	cout << "排序前::: " ;
 	sort.displaySort();
 	sort.bubbleSort();
 	cout << "排序后::: ";
 	sort.displaySort();
+	cout << endl;
+	a.clear();
+	makeArray(a,10);
+	cout << "############### 选择排序法 ###############" << endl;
+	cout << "排序前::: " ;
+	sort.displaySort();
+	sort.selectionSort();
+	cout << "排序后::: ";
+	sort.displaySort();
+	
+	
+	
 	
 	
 	
