@@ -104,6 +104,34 @@ namespace aglo{
 			
 		}
 		
+		
+		//
+		//	归并排序
+		//
+		void mergeSort(){
+			vector<T> merge;
+			_mergeSort((*m_sort_list),merge,0,(*m_sort_list).size());
+		}
+		
+		
+		//
+		//	堆排序
+		//
+		void heapSort(){
+			T tmp;
+			buildHeap();
+			for(int i = (*m_sort_list).size()-1; i > 0; --i)
+			{
+				tmp=(*m_sort_list)[i];
+				(*m_sort_list)[i]=(*m_sort_list)[0];
+				(*m_sort_list)[0]=tmp;				
+				adjHeap(0,i);
+
+			}
+		}
+		
+		
+		
 		void displaySort(){
 			
 			for(size_t i = 0; i < (*m_sort_list).size(); ++i)
@@ -121,6 +149,63 @@ namespace aglo{
 	private:
 		vector<T> *m_sort_list;
 		bool (*compre)(T,T);
+		
+		//
+		//
+		//
+		void _mergeSort(vector<T>source,vector<T>target,int start,int end){
+			
+			
+			
+			
+		}
+		
+		//
+		//	堆排序，调整堆
+		//
+		void adjHeap(int start,int size){
+			
+			
+	
+			int left=start*2+1;
+			int right=start*2+2;
+			T tmp;
+			
+			if((*m_sort_list)[start] < (*m_sort_list)[left] &&left < size){
+				tmp=(*m_sort_list)[start];
+				(*m_sort_list)[start]=(*m_sort_list)[left];
+				(*m_sort_list)[left]=tmp;
+				adjHeap(left,size);
+			}
+			
+			if((*m_sort_list)[start] < (*m_sort_list)[right] && right < size){
+				tmp=(*m_sort_list)[start];
+				(*m_sort_list)[start]=(*m_sort_list)[right];
+				(*m_sort_list)[right]=tmp;
+				adjHeap(right,size);
+			}	
+			
+				
+			return ;
+			
+			
+			
+			
+		}
+		
+		//
+		//	堆排序，建立堆
+		//
+		void buildHeap(){
+			
+			for(int i = ((*m_sort_list).size()-1)/2; i >= 0 ; --i)
+			{
+				adjHeap(i,(*m_sort_list).size());
+			}
+			
+			
+		}
+		
 		
 		//
 		//	快速排序具体实现
@@ -188,7 +273,7 @@ void makeArray(vector<int>& array,int num){
 		
 	for(size_t i = 0; i < num; ++i)
 	{
-		array.push_back(rand()%10);
+		array.push_back(rand()%1000);
 		/* code */
 	}
 	
@@ -235,7 +320,15 @@ int main (int argc, char const *argv[])
 	sort.selectionSort();
 	cout << "排序后::: ";
 	sort.displaySort();
-	
+	cout << endl;
+	a.clear();
+	makeArray(a,10);
+	cout << "############### 堆排序法 ###############" << endl;
+	cout << "排序前::: " ;
+	sort.displaySort();
+	sort.heapSort();
+	cout << "排序后::: ";
+	sort.displaySort();
 	
 	
 	
