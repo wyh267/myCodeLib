@@ -44,7 +44,7 @@ def calcCosDist(user1,user2):
             if key1[0]==key2[0] :
                 sum_xy+=key1[1]*key2[1]
                 sum_y+=key2[1]*key2[1]
-        sum_x+=key1[1]*key1[1]
+                sum_x+=key1[1]*key1[1]
     
     if sum_xy == 0.0 :
         return 0
